@@ -1,0 +1,11 @@
+{
+  "name": "krenzer-design",
+  "private": true,
+  "description": "Statische Website mit Sanity als Backend. Kein Build-Schritt.",
+  "scripts": {
+    "dev": "npx --yes serve@latest . -l 5173",
+    "studio": "npm --prefix studio run dev",
+    "studio:deploy": "npm --prefix studio run deploy",
+    "schema:deploy": "npm --prefix studio exec -- sanity schema deploy"
+  }
+}

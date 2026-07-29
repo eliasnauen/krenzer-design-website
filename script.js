@@ -1,8 +1,11 @@
 /* Krenzer Design — Interaktionen
    Scroll-Fortschritt, Cursor-Spotlight, Stack-Tabs, Case-Hover,
-   Scroll-Reveal, aktive Navigation. */
+   Scroll-Reveal, aktive Navigation.
 
-(function () {
+   Wird von main.js aufgerufen, nachdem die Inhalte aus dem CMS im DOM stehen —
+   sonst würden die Event-Listener an Elementen hängen, die es nicht mehr gibt. */
+
+export function initInteractions() {
   "use strict";
 
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -49,12 +52,8 @@
   }, 260);
 
   /* --- Stack-Tabs -------------------------------------------------------- */
-  var meta = {
-    tokens:  { fileName: "styles/tokens.css",              fileMeta: "auto-generiert · 04:12" },
-    content: { fileName: "schemas/caseStudy.ts",           fileMeta: "Headless CMS" },
-    perf:    { fileName: ".github/workflows/budget.yml",   fileMeta: "CI · 14 Checks" }
-  };
-
+  /* Dateiname und Zusatz stehen am jeweiligen Pane (data-file-name / data-file-meta),
+     gesetzt aus dem CMS — deshalb hier keine fest verdrahtete Zuordnung mehr. */
   var tabs = Array.prototype.slice.call(document.querySelectorAll(".tab"));
   var panes = Array.prototype.slice.call(document.querySelectorAll(".viewer__pane"));
   var fileName = document.getElementById("fileName");
@@ -70,17 +69,19 @@
     panes.forEach(function (p) {
       var on = p.dataset.pane === key;
       p.classList.toggle("is-active", on);
+      if (!on) return;
+
       // Tipp-Animation beim Wechsel neu starten
-      if (on && !reduceMotion) {
+      if (!reduceMotion) {
         var code = p.querySelector(".code");
         code.style.animation = "none";
         void code.offsetWidth;
         code.style.animation = "";
       }
-    });
 
-    fileName.textContent = meta[key].fileName;
-    fileMeta.textContent = meta[key].fileMeta;
+      fileName.textContent = p.dataset.fileName || "";
+      fileMeta.textContent = p.dataset.fileMeta || "";
+    });
   }
 
   tabs.forEach(function (t) {
@@ -113,7 +114,10 @@
   /* --- Aktiver Navigationspunkt ------------------------------------------ */
   var navLinks = Array.prototype.slice.call(document.querySelectorAll(".nav a"));
   var sections = navLinks
-    .map(function (a) { return document.querySelector(a.getAttribute("href")); })
+    .map(function (a) {
+      var href = a.getAttribute("href");
+      return href && href.charAt(0) === "#" ? document.querySelector(href) : null;
+    })
     .filter(Boolean);
 
   if ("IntersectionObserver" in window && sections.length) {
@@ -128,4 +132,4 @@
 
     sections.forEach(function (s) { navIo.observe(s); });
   }
-})();
+}

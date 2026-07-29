@@ -1,0 +1,9 @@
+node_modules/
+.DS_Store
+.env
+.env.local
+studio/dist/
+.playwright-mcp/
+
+.sanity/
+tsconfig.tsbuildinfo
