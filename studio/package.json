@@ -1,20 +1,20 @@
 {
-  "name": "krenzer-design",
+  "name": "krenzer-design-studio",
   "private": true,
   "version": "1.0.0",
-  "main": "package.json",
-  "license": "UNLICENSED",
+  "description": "Sanity Studio – das Redaktions-Backend der Krenzer-Design-Website",
+  "type": "module",
   "scripts": {
+    "dev": "sanity dev",
+    "start": "sanity dev",
     "build": "sanity build",
     "deploy": "sanity deploy",
     "deploy-graphql": "sanity graphql deploy",
-    "dev": "sanity dev",
-    "start": "sanity start"
+    "schema:deploy": "sanity schema deploy",
+    "seed": "node scripts/seed.mjs"
   },
-  "keywords": [
-    "sanity"
-  ],
   "dependencies": {
+    "@sanity/icons": "^5.2.1",
     "@sanity/vision": "^6.7.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
@@ -22,10 +22,8 @@
     "styled-components": "^6.1.18"
   },
   "devDependencies": {
-    "@sanity/eslint-config-studio": "^6.0.0",
+    "@sanity/client": "^7.24.0",
     "@types/react": "^19.2.14",
-    "eslint": "^9.28",
-    "prettier": "^3.5",
     "typescript": "^5.8"
   },
   "prettier": {

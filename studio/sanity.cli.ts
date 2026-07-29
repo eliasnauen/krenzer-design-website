@@ -1,15 +1,19 @@
 import {defineCliConfig} from 'sanity/cli'
 
+/**
+ * Konfiguration für die Sanity-Kommandozeile (sanity dev / build / deploy).
+ * Projekt-ID und Dataset stehen zentral hier – dieselben Werte nutzt auch
+ * das Frontend (siehe ../cms/config.js).
+ */
 export default defineCliConfig({
   api: {
     projectId: 'fohvltfb',
-    dataset: 'production'
+    dataset: 'production',
   },
+  /** Name der gehosteten Studio-URL: https://krenzer-design.sanity.studio */
+  studioHost: 'krenzer-design',
   deployment: {
-    /**
-     * Enable auto-updates for studios.
-     * Learn more at https://www.sanity.io/docs/studio/latest-version-of-sanity#k47faf43faf56
-     */
+    appId: 'twc55j659ot90ivaqqu7pkeg',
     autoUpdates: true,
   },
 })

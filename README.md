@@ -16,6 +16,9 @@ cms/
   highlight.js      Code-Ausschnitte einfärben und tippen lassen
   html.js           Escaping
 studio/             Sanity Studio (eigenständig, eigene Abhängigkeiten)
+  schemaTypes/      shared · siteSettings · sections · project
+  structure.ts      die linke Navigation im Studio
+  scripts/seed.mjs  Erstbefüllung des Datasets
 ```
 
 ## Loslegen
@@ -33,6 +36,7 @@ Beim ersten Mal im Studio-Ordner einmal `npm install` — das ist schon geschehe
 |---|---|
 | Projekt-ID | `fohvltfb` |
 | Dataset | `production` (öffentlich lesbar) |
+| Studio (live) | https://krenzer-design.sanity.studio |
 | Manage | https://www.sanity.io/manage/project/fohvltfb |
 
 Das Dataset ist öffentlich lesbar, deshalb braucht die Website **keinen API-Token**
@@ -42,13 +46,13 @@ Das Dataset ist öffentlich lesbar, deshalb braucht die Website **keinen API-Tok
 
 Das Studio hat drei Einträge:
 
-**Startseite** — ein Reiter pro Abschnitt, in der Reihenfolge der Seite:
-Einstieg · Kundenlogos · Leistungen · Unter der Haube · Arbeiten · Prozess · Stimmen · Kontakt.
+**Website-Einstellungen** — Marke, Navigation, Footer, Suchmaschinen- und Teilen-Texte.
+
+**Startseite** — darunter ein eigener Eintrag je Abschnitt, in der Reihenfolge der Seite:
+Kopfbereich · Kundenlogos · Leistungen · Unter der Haube · Arbeiten · Prozess · Stimmen · Kontakt.
 
 **Projekte** — die Referenzprojekte. Welche davon auf der Startseite erscheinen und in
 welcher Reihenfolge, steht unter *Startseite → Arbeiten*.
-
-**Website-Einstellungen** — Marke, Navigation, Footer, Suchmaschinen- und Teilen-Texte.
 
 Was gut zu wissen ist:
 
@@ -135,7 +139,12 @@ Nach Änderungen in `studio/schemaTypes/`:
 
 ```bash
 npm run schema:deploy    # macht das Schema für Sanity-Tools sichtbar
+npm run studio:deploy    # stellt das Studio unter krenzer-design.sanity.studio neu
 ```
 
+Ändert sich etwas an den Feldern, die die Website liest, müssen `cms/query.js` und
+`cms/render.js` mitgezogen werden. Feldnamen und Aufbau der Abfrage entsprechen
+eins zu eins den Dokumenten in `studio/schemaTypes/sections.ts`.
+
 Felder mit Inhalt nie ersatzlos löschen — erst `deprecated` + `readOnly` setzen,
-Inhalte migrieren, dann entfernen.
+Inhalte migrieren, dann entfernen. Details zum Studio: `studio/README.md`.

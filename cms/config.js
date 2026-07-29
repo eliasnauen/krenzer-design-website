@@ -26,7 +26,7 @@ export const SANITY = {
 
 export const CACHE = {
   /** Schlüssel im sessionStorage. Version hochzählen, wenn sich die Abfrage ändert. */
-  key: 'krenzer:content:v1',
+  key: 'krenzer:content:v2',
 
   /** Wie lange eine Antwort im Browser wiederverwendet wird. */
   ttlMs: 60_000,

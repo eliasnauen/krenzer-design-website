@@ -1,4 +1,7 @@
-/* Eine einzige GROQ-Abfrage holt alles, was die Seite braucht — ein Request pro Aufruf. */
+/* Eine einzige GROQ-Abfrage holt alles, was die Seite braucht — ein Request pro Aufruf.
+
+   Jeder Abschnitt der Startseite ist im Studio ein eigenes Dokument mit fester ID
+   (siehe studio/structure.ts). Hier werden sie unter sprechenden Namen gebündelt. */
 
 export const CONTENT_QUERY = `{
   "settings": *[_id == "siteSettings"][0]{
@@ -16,45 +19,61 @@ export const CONTENT_QUERY = `{
     shareTitle,
     shareDescription
   },
-  "home": *[_id == "homePage"][0]{
-    heroBadge,
-    heroHeading,
-    heroLead,
-    heroPrimaryCta{label, href},
-    heroSecondaryCta{label, href},
-    showcaseTitle,
-    showcaseStatus,
-    showcaseSnippet{language, code, caret},
-    metricsLabel,
-    metrics[]{_key, label, value, fill},
-    metricsFootnote,
-    logosLabel,
-    logos[]{_key, name, style},
-    servicesEyebrow,
-    servicesHeading,
-    servicesLead,
-    services[]{_key, title, text, tags},
-    stackEyebrow,
-    stackHeading,
-    stackMeta,
-    stackTabs[]{_key, title, summary, fileName, fileMeta, tags, snippet{language, code, caret}},
-    workEyebrow,
-    workHeading,
-    workLink{label, href},
-    featuredProjects[]->{_id, client, description, kpi, year, href},
-    processEyebrow,
-    processHeading,
-    processSteps[]{_key, label, title, text, highlighted},
+  "hero": *[_id == "hero"][0]{
+    badge,
+    heading,
+    lead,
+    primaryCta{label, href},
+    secondaryCta{label, href},
+    showcase{
+      title,
+      status,
+      snippet{language, code, caret},
+      metricsLabel,
+      metrics[]{_key, label, value, fill},
+      metricsFootnote
+    }
+  },
+  "logos": *[_id == "sectionLogos"][0]{
+    label,
+    logos[]{_key, name, style}
+  },
+  "leistungen": *[_id == "sectionLeistungen"][0]{
+    eyebrow,
+    heading,
+    lead,
+    items[]{_key, title, text, tags}
+  },
+  "stack": *[_id == "sectionStack"][0]{
+    eyebrow,
+    heading,
+    meta,
+    tabs[]{_key, title, summary, fileName, fileMeta, tags, snippet{language, code, caret}}
+  },
+  "arbeiten": *[_id == "sectionArbeiten"][0]{
+    eyebrow,
+    heading,
+    link{label, href},
+    projects[]->{_id, client, description, kpi, year, href}
+  },
+  "prozess": *[_id == "sectionProzess"][0]{
+    eyebrow,
+    heading,
+    steps[]{_key, label, title, text, highlighted}
+  },
+  "stimmen": *[_id == "sectionStimmen"][0]{
     quote,
-    quoteAccent,
-    quoteInitials,
-    quoteAuthor,
-    quoteRole,
-    kpis[]{_key, value, label},
-    ctaEyebrow,
-    ctaHeading,
-    ctaLead,
-    ctaPrimary{label, href},
-    ctaSecondary{label, href}
+    accent,
+    initials,
+    author,
+    role,
+    kpis[]{_key, value, label}
+  },
+  "kontakt": *[_id == "sectionKontakt"][0]{
+    eyebrow,
+    heading,
+    lead,
+    primaryCta{label, href},
+    secondaryCta{label, href}
   }
 }`

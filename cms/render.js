@@ -1,5 +1,8 @@
 /* Inhalte aus Sanity in das bestehende Markup schreiben.
 
+   Ein Renderer je Abschnitt — in derselben Reihenfolge und unter denselben Namen
+   wie die Dokumente im Studio (studio/schemaTypes/sections.ts).
+
    Grundsatz: index.html bleibt vollständig und gültig — die eingecheckte Fassung ist der
    letzte bekannte Stand und damit das, was Netlify ausliefert, bevor der Abruf da ist.
    Geschrieben wird nur, was sich tatsächlich unterscheidet (`setText`/`setHtml`/`setAttr`
@@ -86,36 +89,38 @@ function renderChrome(settings) {
   setLink($('.header__actions .btn'), settings.headerCta)
 }
 
-/* --- 1 · Einstieg ---------------------------------------------------------- */
+/* --- 1 · Kopfbereich ------------------------------------------------------- */
 
-function renderHero(home) {
-  if (home.heroBadge) {
+function renderHero(hero) {
+  if (hero.badge) {
     setHtml(
       $('.badge'),
-      '<span class="badge__dot"><span class="badge__ring"></span></span>' +
-        escapeText(home.heroBadge),
+      '<span class="badge__dot"><span class="badge__ring"></span></span>' + escapeText(hero.badge),
     )
   }
 
-  setHtml($('.display'), multiline(home.heroHeading))
-  setText($('.hero__lead'), home.heroLead)
-  setLink($('.hero__actions .btn--primary'), home.heroPrimaryCta)
-  setLink($('.hero__actions .btn--ghost'), home.heroSecondaryCta)
+  setHtml($('.display'), multiline(hero.heading))
+  setText($('.hero__lead'), hero.lead)
+  setLink($('.hero__actions .btn--primary'), hero.primaryCta)
+  setLink($('.hero__actions .btn--ghost'), hero.secondaryCta)
 
-  setText($('.window__title'), home.showcaseTitle)
-  setText($('.pill-live'), home.showcaseStatus)
+  const showcase = hero.showcase
+  if (!showcase) return
 
-  const snippet = home.showcaseSnippet
+  setText($('.window__title'), showcase.title)
+  setText($('.pill-live'), showcase.status)
+
+  const snippet = showcase.snippet
   if (snippet?.code) {
     setHtml($('.code--split'), buildCodeHtml(snippet.code, snippet.language, snippet.caret))
   }
 
-  setText($('.metrics__label'), home.metricsLabel)
+  setText($('.metrics__label'), showcase.metricsLabel)
 
-  if (Array.isArray(home.metrics)) {
+  if (Array.isArray(showcase.metrics)) {
     setHtml(
       $('.metrics__list'),
-      home.metrics
+      showcase.metrics
         .map((metric, index) => {
           // Die Balken laufen versetzt an, damit sie nicht wie eine Wand wirken.
           const delay = (0.45 + index * 0.35).toFixed(2)
@@ -134,19 +139,20 @@ function renderHero(home) {
     )
   }
 
-  setHtml($('.metrics__foot'), multiline(home.metricsFootnote))
+  setHtml($('.metrics__foot'), multiline(showcase.metricsFootnote))
 }
 
 /* --- 2 · Kundenlogos ------------------------------------------------------- */
 
-function renderLogos(home) {
-  setText($('.marquee-section__label'), home.logosLabel)
+function renderLogos(section) {
+  setText($('.marquee-section__label'), section.label)
 
-  if (!Array.isArray(home.logos) || home.logos.length === 0) return
+  const logos = section.logos
+  if (!Array.isArray(logos) || logos.length === 0) return
 
   // Das Laufband braucht die Liste doppelt: die Animation schiebt um exakt 50 %.
   const pass = (hidden) =>
-    home.logos
+    logos
       .map(
         (logo) =>
           `<span class="logo logo--${escapeAttr(logo.style || 'a')}"` +
@@ -159,23 +165,23 @@ function renderLogos(home) {
 
 /* --- 3 · Leistungen -------------------------------------------------------- */
 
-function renderServices(home) {
-  setText($('#leistungen .eyebrow'), home.servicesEyebrow)
-  setHtml($('#leistungen .h2'), multiline(home.servicesHeading))
-  setText($('#leistungen .section__lead'), home.servicesLead)
+function renderLeistungen(section) {
+  setText($('#leistungen .eyebrow'), section.eyebrow)
+  setHtml($('#leistungen .h2'), multiline(section.heading))
+  setText($('#leistungen .section__lead'), section.lead)
 
-  if (!Array.isArray(home.services)) return
+  if (!Array.isArray(section.items)) return
 
   setHtml(
     $('#leistungen .cards'),
-    home.services
+    section.items
       .map(
-        (service, index) =>
+        (item, index) =>
           '<article class="card reveal">' +
           `<div class="card__num">${ordinal(index)}</div>` +
-          `<h3 class="card__title">${escapeText(service.title)}</h3>` +
-          `<p class="card__text">${escapeText(service.text)}</p>` +
-          `<div class="tags">${tagsHtml(service.tags)}</div>` +
+          `<h3 class="card__title">${escapeText(item.title)}</h3>` +
+          `<p class="card__text">${escapeText(item.text)}</p>` +
+          `<div class="tags">${tagsHtml(item.tags)}</div>` +
           '</article>',
       )
       .join(''),
@@ -197,11 +203,11 @@ function paneHtml(tab, active) {
   )
 }
 
-function renderStack(home) {
-  setText($('#stack .eyebrow'), home.stackEyebrow)
-  setHtml($('#stack .h2'), multiline(home.stackHeading))
+function renderStack(section) {
+  setText($('#stack .eyebrow'), section.eyebrow)
+  setHtml($('#stack .h2'), multiline(section.heading))
 
-  const tabs = home.stackTabs
+  const tabs = section.tabs
   if (!Array.isArray(tabs) || tabs.length === 0) return
 
   setHtml(
@@ -218,7 +224,7 @@ function renderStack(home) {
           '</button>'
         )
       })
-      .join('') + `<div class="stack__meta">${multiline(home.stackMeta)}</div>`,
+      .join('') + `<div class="stack__meta">${multiline(section.meta)}</div>`,
   )
 
   const viewer = $('.stack__viewer')
@@ -252,12 +258,12 @@ function renderStack(home) {
 
 /* --- 5 · Arbeiten ---------------------------------------------------------- */
 
-function renderWork(home) {
-  setText($('#arbeiten .eyebrow'), home.workEyebrow)
-  setHtml($('#arbeiten .h2'), multiline(home.workHeading))
-  setLink($('#arbeiten .link-underline'), home.workLink)
+function renderArbeiten(section) {
+  setText($('#arbeiten .eyebrow'), section.eyebrow)
+  setHtml($('#arbeiten .h2'), multiline(section.heading))
+  setLink($('#arbeiten .link-underline'), section.link)
 
-  const projects = home.featuredProjects
+  const projects = section.projects
   if (!Array.isArray(projects)) return
 
   setHtml(
@@ -280,15 +286,15 @@ function renderWork(home) {
 
 /* --- 6 · Prozess ----------------------------------------------------------- */
 
-function renderProcess(home) {
-  setText($('#prozess .eyebrow'), home.processEyebrow)
-  setHtml($('#prozess .h2'), multiline(home.processHeading))
+function renderProzess(section) {
+  setText($('#prozess .eyebrow'), section.eyebrow)
+  setHtml($('#prozess .h2'), multiline(section.heading))
 
-  if (!Array.isArray(home.processSteps)) return
+  if (!Array.isArray(section.steps)) return
 
   setHtml(
     $('#prozess .steps'),
-    home.processSteps
+    section.steps
       .map(
         (step) =>
           `<div class="step${step.highlighted ? ' step--active' : ''}">` +
@@ -317,22 +323,22 @@ function quoteHtml(quote, accent) {
   )
 }
 
-function renderTestimonial(home) {
-  setHtml($('.quote p'), quoteHtml(home.quote, home.quoteAccent))
-  setText($('.avatar'), home.quoteInitials)
+function renderStimmen(section) {
+  setHtml($('.quote p'), quoteHtml(section.quote, section.accent))
+  setText($('.avatar'), section.initials)
 
-  if (home.quoteAuthor) {
+  if (section.author) {
     setHtml(
       $('.quote__author'),
-      `${escapeText(home.quoteAuthor)}<br><span>${escapeText(home.quoteRole || '')}</span>`,
+      `${escapeText(section.author)}<br><span>${escapeText(section.role || '')}</span>`,
     )
   }
 
-  if (!Array.isArray(home.kpis)) return
+  if (!Array.isArray(section.kpis)) return
 
   setHtml(
     $('.kpis'),
-    home.kpis
+    section.kpis
       .map(
         (kpi) =>
           '<div class="kpi">' +
@@ -346,12 +352,12 @@ function renderTestimonial(home) {
 
 /* --- 8 · Kontakt ----------------------------------------------------------- */
 
-function renderCta(home) {
-  setText($('#kontakt .eyebrow'), home.ctaEyebrow)
-  setHtml($('#kontakt .h2'), multiline(home.ctaHeading))
-  setText($('.cta__lead'), home.ctaLead)
-  setLink($('.cta__actions .btn--primary'), home.ctaPrimary)
-  setLink($('.cta__actions .btn--mono'), home.ctaSecondary)
+function renderKontakt(section) {
+  setText($('#kontakt .eyebrow'), section.eyebrow)
+  setHtml($('#kontakt .h2'), multiline(section.heading))
+  setText($('.cta__lead'), section.lead)
+  setLink($('.cta__actions .btn--primary'), section.primaryCta)
+  setLink($('.cta__actions .btn--mono'), section.secondaryCta)
 }
 
 /* --- Footer ---------------------------------------------------------------- */
@@ -390,17 +396,16 @@ function renderFooter(settings) {
 /** Schreibt einen kompletten CMS-Stand in die Seite. */
 export function applyContent(content) {
   const settings = content?.settings ?? {}
-  const home = content?.home ?? {}
 
   renderHead(settings)
   renderChrome(settings)
-  renderHero(home)
-  renderLogos(home)
-  renderServices(home)
-  renderStack(home)
-  renderWork(home)
-  renderProcess(home)
-  renderTestimonial(home)
-  renderCta(home)
+  renderHero(content?.hero ?? {})
+  renderLogos(content?.logos ?? {})
+  renderLeistungen(content?.leistungen ?? {})
+  renderStack(content?.stack ?? {})
+  renderArbeiten(content?.arbeiten ?? {})
+  renderProzess(content?.prozess ?? {})
+  renderStimmen(content?.stimmen ?? {})
+  renderKontakt(content?.kontakt ?? {})
   renderFooter(settings)
 }

@@ -2,8 +2,9 @@ import {defineArrayMember, defineField, defineType} from 'sanity'
 import {CogIcon} from '@sanity/icons/Cog'
 
 /**
- * Alles, was auf jeder Seite gleich ist: Marke, Navigation, Footer, Suchmaschinen-Text.
- * Singleton — es gibt genau ein Dokument davon (siehe structure.ts).
+ * Alles, was nicht zu einem einzelnen Abschnitt gehört: Marke, Navigation,
+ * Footer und die Angaben für Suchmaschinen. Diese Werte tauchen an mehreren
+ * Stellen der Seite auf und werden hier nur einmal gepflegt.
  */
 export const siteSettings = defineType({
   name: 'siteSettings',
@@ -11,31 +12,30 @@ export const siteSettings = defineType({
   type: 'document',
   icon: CogIcon,
   groups: [
-    {name: 'brand', title: 'Marke', default: true},
+    {name: 'marke', title: 'Marke', default: true},
     {name: 'navigation', title: 'Navigation'},
     {name: 'footer', title: 'Footer'},
-    {name: 'seo', title: 'Suchmaschinen & Teilen'},
+    {name: 'seo', title: 'Suchmaschine & Teilen'},
   ],
-
   fields: [
-    // --- Marke ---------------------------------------------------------------
+    /* --- Marke --- */
     defineField({
       name: 'brandInitial',
       title: 'Logo-Buchstabe',
       type: 'string',
-      group: 'brand',
-      description: 'Das Kürzel im schwarzen Quadrat. Ein einzelner Buchstabe.',
+      group: 'marke',
+      description: 'Das Kürzel im hellen Quadrat. Ein einzelner Buchstabe.',
       validation: (rule) => rule.required().max(2),
     }),
     defineField({
       name: 'brandName',
       title: 'Name',
       type: 'string',
-      group: 'brand',
+      group: 'marke',
       validation: (rule) => rule.required(),
     }),
 
-    // --- Navigation ----------------------------------------------------------
+    /* --- Navigation --- */
     defineField({
       name: 'mainNav',
       title: 'Hauptnavigation',
@@ -61,7 +61,7 @@ export const siteSettings = defineType({
       group: 'navigation',
     }),
 
-    // --- Footer --------------------------------------------------------------
+    /* --- Footer --- */
     defineField({
       name: 'footerAbout',
       title: 'Kurztext',
@@ -74,7 +74,35 @@ export const siteSettings = defineType({
       title: 'Spalten',
       type: 'array',
       group: 'footer',
-      of: [defineArrayMember({type: 'footerColumn'})],
+      of: [
+        defineArrayMember({
+          type: 'object',
+          name: 'footerColumn',
+          title: 'Spalte',
+          fields: [
+            defineField({
+              name: 'title',
+              title: 'Überschrift',
+              type: 'string',
+              validation: (rule) => rule.required(),
+            }),
+            defineField({
+              name: 'links',
+              title: 'Links',
+              type: 'array',
+              of: [defineArrayMember({type: 'link'})],
+              validation: (rule) => rule.min(1),
+            }),
+          ],
+          preview: {
+            select: {title: 'title', links: 'links'},
+            prepare({title, links}) {
+              const count = Array.isArray(links) ? links.length : 0
+              return {title, subtitle: `${count} ${count === 1 ? 'Link' : 'Links'}`}
+            },
+          },
+        }),
+      ],
       validation: (rule) => rule.max(3).warning('Mehr als drei Spalten sprengen das Raster.'),
     }),
     defineField({
@@ -91,15 +119,14 @@ export const siteSettings = defineType({
       description: 'Aktuell „Gebaut in Würzburg“.',
     }),
 
-    // --- SEO -----------------------------------------------------------------
+    /* --- Suchmaschine & Teilen --- */
     defineField({
       name: 'seoTitle',
       title: 'Seitentitel',
       type: 'string',
       group: 'seo',
       description: 'Steht im Browser-Tab und als Überschrift in den Suchergebnissen.',
-      validation: (rule) =>
-        rule.max(65).warning('Über 65 Zeichen kürzt Google die Anzeige ab.'),
+      validation: (rule) => rule.max(65).warning('Über 65 Zeichen kürzt Google die Anzeige ab.'),
     }),
     defineField({
       name: 'seoDescription',
@@ -107,8 +134,7 @@ export const siteSettings = defineType({
       type: 'text',
       rows: 3,
       group: 'seo',
-      validation: (rule) =>
-        rule.max(160).warning('Über 160 Zeichen kürzt Google die Anzeige ab.'),
+      validation: (rule) => rule.max(160).warning('Über 160 Zeichen kürzt Google die Anzeige ab.'),
     }),
     defineField({
       name: 'shareTitle',
@@ -125,10 +151,5 @@ export const siteSettings = defineType({
       group: 'seo',
     }),
   ],
-
-  preview: {
-    prepare() {
-      return {title: 'Website-Einstellungen'}
-    },
-  },
+  preview: {prepare: () => ({title: 'Website-Einstellungen'})},
 })
