@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Krenzer Design — Studio für Markenauftritte und Web-Interfaces</title>
+<meta name="description" content="Krenzer Design ist ein Studio für Markenauftritte und Web-Interfaces. Redaktionelles Design, präzise gebaut — headless, schnell, messbar.">
+<meta name="theme-color" content="#000000">
+<meta property="og:title" content="Krenzer Design">
+<meta property="og:description" content="Websites, die sich anfühlen wie gute Software.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<a class="skip-link" href="#top">Zum Inhalt springen</a>
+
+<div class="progress"><span class="progress__bar" id="progressBar"></span></div>
+
+<div class="page" id="page">
+  <div class="spotlight" id="spotlight"></div>
+  <div class="glow glow--top"></div>
+  <div class="glow glow--right"></div>
+
+  <header class="header">
+    <div class="header__inner">
+      <a class="brand" href="#top">
+        <span class="brand__mark">K</span>
+        <span class="brand__name">Krenzer Design</span>
+      </a>
+      <nav class="nav" id="nav" aria-label="Hauptnavigation">
+        <a href="#leistungen">Leistungen<span class="nav__bar"></span></a>
+        <a href="#arbeiten">Arbeiten<span class="nav__bar"></span></a>
+        <a href="#stack">Stack<span class="nav__bar"></span></a>
+        <a href="#prozess">Prozess<span class="nav__bar"></span></a>
+      </nav>
+      <div class="header__spacer"></div>
+      <div class="header__actions">
+        <a class="link-quiet" href="#kontakt">Kundenlogin</a>
+        <a class="btn btn--ghost btn--sm" href="#kontakt">Projekt starten</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero" id="top">
+    <div class="badge">
+      <span class="badge__dot"><span class="badge__ring"></span></span>
+      Zwei Projektslots frei · Q4 2026
+    </div>
+
+    <h1 class="display">Websites, die sich anfühlen wie gute Software.</h1>
+
+    <p class="hero__lead">
+      Krenzer Design ist ein Studio für Markenauftritte und Web-Interfaces. Redaktionelles Design,
+      präzise gebaut — headless, schnell, messbar.
+    </p>
+
+    <div class="hero__actions">
+      <a class="btn btn--primary" href="#kontakt">Projekt anfragen</a>
+      <a class="btn btn--ghost" href="#arbeiten">Arbeiten ansehen</a>
+    </div>
+
+    <div class="showcase">
+      <div class="showcase__glow"></div>
+      <div class="window">
+        <div class="window__bar">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          <span class="window__title">krenzer.studio — Hero.tsx</span>
+          <span class="pill-live">live</span>
+        </div>
+        <div class="window__body">
+          <pre class="code code--split" data-type><span class="cl"><span class="tw" style="--s:55;--dur:.71s;--d:0s"><span class="c-com">// eine Komponente, drei Breakpoints, kein Layout-Shift</span></span></span><span class="cl"><span class="tw" style="--s:46;--dur:.60s;--d:.51s"><span class="c-key">export default function</span> <span class="c-fn">Hero</span>(<span class="c-attr">{ claim, cta }</span>) {</span></span><span class="cl"><span class="tw" style="--s:10;--dur:.16s;--d:.95s">  <span class="c-key">return</span> (</span></span><span class="cl"><span class="tw" style="--s:45;--dur:.58s;--d:1.06s">    &lt;<span class="c-fn">Section</span> <span class="c-attr">tone</span>=<span class="c-str">"quiet"</span> <span class="c-attr">rhythm</span>=<span class="c-str">"editorial"</span>&gt;</span></span><span class="cl"><span class="tw" style="--s:40;--dur:.52s;--d:1.48s">      &lt;<span class="c-fn">Display</span> <span class="c-attr">balance</span>&gt;{claim}&lt;/<span class="c-fn">Display</span>&gt;</span></span><span class="cl"><span class="tw" style="--s:45;--dur:.58s;--d:1.86s">      &lt;<span class="c-fn">Button</span> <span class="c-attr">intent</span>=<span class="c-str">"primary"</span>&gt;{cta}&lt;/<span class="c-fn">Button</span>&gt;</span></span><span class="cl"><span class="tw" style="--s:14;--dur:.18s;--d:2.28s">    &lt;/<span class="c-fn">Section</span>&gt;</span></span><span class="cl"><span class="tw" style="--s:4;--dur:.16s;--d:2.41s">  )</span></span><span class="cl"><span class="tw" style="--s:4;--dur:.16s;--d:2.52s">}<span class="caret"></span></span></span></pre>
+
+          <div class="metrics">
+            <div class="metrics__label">Messung nach Launch</div>
+            <div class="metrics__list">
+              <div class="metric">
+                <div class="metric__head"><span>Lighthouse Performance</span><span class="mono">99</span></div>
+                <div class="meter"><span class="meter__fill" style="--w:99%;--delay:.45s;--dur:2.8s"></span></div>
+              </div>
+              <div class="metric">
+                <div class="metric__head"><span>Accessibility</span><span class="mono">100</span></div>
+                <div class="meter"><span class="meter__fill" style="--w:100%;--delay:.8s;--dur:3.1s"></span></div>
+              </div>
+              <div class="metric">
+                <div class="metric__head"><span>Bundle-Budget</span><span class="mono">78 / 120 kB</span></div>
+                <div class="meter"><span class="meter__fill" style="--w:65%;--delay:1.15s;--dur:3.4s"></span></div>
+              </div>
+            </div>
+            <div class="metrics__foot">LCP 0.8s · CLS 0.00<br>Edge FRA1 · Vercel</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Logos -->
+  <section class="marquee-section">
+    <div class="marquee-section__label">Marken, die uns vertrauen</div>
+    <div class="marquee">
+      <div class="marquee__track">
+        <span class="logo logo--a">Voltmark</span>
+        <span class="logo logo--b">Halden Studio</span>
+        <span class="logo logo--c">Nordkap</span>
+        <span class="logo logo--d">ferrum</span>
+        <span class="logo logo--a">Aurelis Bau</span>
+        <span class="logo logo--e">Klarwerk</span>
+        <span class="logo logo--a" aria-hidden="true">Voltmark</span>
+        <span class="logo logo--b" aria-hidden="true">Halden Studio</span>
+        <span class="logo logo--c" aria-hidden="true">Nordkap</span>
+        <span class="logo logo--d" aria-hidden="true">ferrum</span>
+        <span class="logo logo--a" aria-hidden="true">Aurelis Bau</span>
+        <span class="logo logo--e" aria-hidden="true">Klarwerk</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Leistungen -->
+  <section class="section" id="leistungen">
+    <div class="section__head reveal">
+      <div class="eyebrow">Leistungen</div>
+      <h2 class="h2">Vier Disziplinen, ein Team.</h2>
+      <p class="section__lead">Kein Handoff zwischen Agenturen. Strategie, Design und Entwicklung sitzen im selben Raum — was im Design steht, landet genau so im Browser.</p>
+    </div>
+
+    <div class="cards">
+      <article class="card reveal">
+        <div class="card__num">01</div>
+        <h3 class="card__title">Brand &amp; Art Direction</h3>
+        <p class="card__text">Wortmarke, Typo-System, Bildsprache, Motion-Prinzipien. Als lebendiges Design-System, nicht als PDF.</p>
+        <div class="tags"><span class="tag">Logo</span><span class="tag">Type Scale</span><span class="tag">Guidelines</span></div>
+      </article>
+      <article class="card reveal">
+        <div class="card__num">02</div>
+        <h3 class="card__title">Web &amp; Product Design</h3>
+        <p class="card__text">Von der Sitemap bis zum letzten Hover-State. Prototypen, die man klicken kann, bevor gebaut wird.</p>
+        <div class="tags"><span class="tag">UX</span><span class="tag">UI Kit</span><span class="tag">Prototyping</span></div>
+      </article>
+      <article class="card reveal">
+        <div class="card__num">03</div>
+        <h3 class="card__title">Headless Development</h3>
+        <p class="card__text">Next.js, TypeScript, Headless CMS. Die Redaktion pflegt Inhalte selbst — ohne Ticket, ohne Wartezeit.</p>
+        <div class="tags"><span class="tag">Next.js</span><span class="tag">CMS</span><span class="tag">Edge</span></div>
+      </article>
+      <article class="card reveal">
+        <div class="card__num">04</div>
+        <h3 class="card__title">Performance &amp; Growth</h3>
+        <p class="card__text">Core Web Vitals, technisches SEO, A/B-Tests. Wir betreuen weiter, wenn andere die Rechnung stellen.</p>
+        <div class="tags"><span class="tag">Web Vitals</span><span class="tag">SEO</span><span class="tag">Analytics</span></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Stack -->
+  <section class="section" id="stack">
+    <div class="section__head reveal">
+      <div class="eyebrow">Unter der Haube</div>
+      <h2 class="h2 h2--wide">Design endet nicht im Entwurf. Es wird ausgeliefert.</h2>
+    </div>
+
+    <div class="stack">
+      <div class="stack__glow"></div>
+      <div class="stack__panel">
+        <div class="stack__side">
+          <button class="tab is-active" type="button" data-tab="tokens" aria-selected="true">
+            <div class="tab__head"><span class="tab__num">01</span><span class="tab__title">Design Tokens</span></div>
+            <div class="tab__text">Eine Quelle für Farbe, Typo und Spacing — Entwurf und Code bleiben synchron.</div>
+          </button>
+          <button class="tab" type="button" data-tab="content" aria-selected="false">
+            <div class="tab__head"><span class="tab__num">02</span><span class="tab__title">Content-Modell</span></div>
+            <div class="tab__text">Strukturierte Inhalte statt Textwüsten im Editor. Redaktionsfreundlich per Definition.</div>
+          </button>
+          <button class="tab" type="button" data-tab="perf" aria-selected="false">
+            <div class="tab__head"><span class="tab__num">03</span><span class="tab__title">Performance-Budget</span></div>
+            <div class="tab__text">Budgets laufen im CI. Wird eine Grenze gerissen, geht der Build nicht live.</div>
+          </button>
+          <div class="stack__meta">TypeScript · Next.js 15<br>Headless CMS · Vercel · Playwright</div>
+        </div>
+
+        <div class="stack__viewer">
+          <div class="viewer__bar">
+            <span class="viewer__dot"></span>
+            <span id="fileName">styles/tokens.css</span>
+            <span class="viewer__meta" id="fileMeta">auto-generiert · 04:12</span>
+          </div>
+
+          <div class="viewer__pane is-active" data-pane="tokens">
+            <pre class="code"><span class="cl"><span class="tw" style="--s:53;--dur:.69s;--d:0s"><span class="c-com">/* tokens.css — generiert aus den Design-Variablen */</span></span></span><span class="cl"><span class="tw" style="--s:7;--dur:.16s;--d:.50s"><span class="c-fn">:root</span> {</span></span><span class="cl"><span class="tw" style="--s:23;--dur:.30s;--d:.61s">  <span class="c-attr">--surface-0</span>: <span class="c-str">#000000</span>;</span></span><span class="cl"><span class="tw" style="--s:23;--dur:.30s;--d:.83s">  <span class="c-attr">--surface-1</span>: <span class="c-str">#141418</span>;</span></span><span class="cl"><span class="tw" style="--s:23;--dur:.30s;--d:1.04s">  <span class="c-attr">--text-1</span>:    <span class="c-str">#F5F5F7</span>;</span></span><span class="cl"><span class="tw" style="--s:23;--dur:.30s;--d:1.26s">  <span class="c-attr">--text-2</span>:    <span class="c-str">#98989D</span>;</span></span><span class="cl"><span class="tw" style="--s:33;--dur:.43s;--d:1.47s">  <span class="c-com">/* fluide Typo, 320 → 1440px */</span></span></span><span class="cl"><span class="tw" style="--s:48;--dur:.62s;--d:1.78s">  <span class="c-attr">--step-6</span>: <span class="c-key">clamp</span>(<span class="c-str">2.6rem</span>, <span class="c-str">1.2rem + 5vw</span>, <span class="c-str">5.1rem</span>);</span></span><span class="cl"><span class="tw" style="--s:35;--dur:.45s;--d:2.23s">  <span class="c-attr">--gutter</span>: <span class="c-key">clamp</span>(<span class="c-str">1rem</span>, <span class="c-str">3vw</span>, <span class="c-str">2rem</span>);</span></span><span class="cl"><span class="tw" style="--s:4;--dur:.16s;--d:2.56s">}</span></span></pre>
+            <div class="viewer__tags"><span class="tag">Design-Variablen</span><span class="tag">CSS Custom Properties</span></div>
+          </div>
+
+          <div class="viewer__pane" data-pane="content">
+            <pre class="code"><span class="cl"><span class="tw" style="--s:23;--dur:.30s;--d:0s"><span class="c-com">// schemas/caseStudy.ts</span></span></span><span class="cl"><span class="tw" style="--s:37;--dur:.48s;--d:.22s"><span class="c-key">export const</span> <span class="c-fn">caseStudy</span> = <span class="c-key">defineType</span>({</span></span><span class="cl"><span class="tw" style="--s:20;--dur:.26s;--d:.56s">  <span class="c-attr">name</span>: <span class="c-str">'caseStudy'</span>,</span></span><span class="cl"><span class="tw" style="--s:11;--dur:.16s;--d:.75s">  <span class="c-attr">fields</span>: [</span></span><span class="cl"><span class="tw" style="--s:53;--dur:.69s;--d:.86s">    <span class="c-key">defineField</span>({ <span class="c-attr">name</span>: <span class="c-str">'kunde'</span>,   <span class="c-attr">type</span>: <span class="c-str">'string'</span> }),</span></span><span class="cl"><span class="tw" style="--s:54;--dur:.70s;--d:1.36s">    <span class="c-key">defineField</span>({ <span class="c-attr">name</span>: <span class="c-str">'wirkung'</span>, <span class="c-attr">type</span>: <span class="c-str">'kpiList'</span> }),</span></span><span class="cl"><span class="tw" style="--s:49;--dur:.64s;--d:1.87s">    <span class="c-key">defineField</span>({ <span class="c-attr">name</span>: <span class="c-str">'module'</span>,  <span class="c-attr">type</span>: <span class="c-str">'array'</span>,</span></span><span class="cl"><span class="tw" style="--s:55;--dur:.71s;--d:2.32s">      <span class="c-attr">of</span>: [{ <span class="c-attr">type</span>: <span class="c-str">'bildText'</span> }, { <span class="c-attr">type</span>: <span class="c-str">'zitat'</span> }] }),</span></span><span class="cl"><span class="tw" style="--s:4;--dur:.16s;--d:2.84s">  ],</span></span><span class="cl"><span class="tw" style="--s:4;--dur:.16s;--d:2.95s">})</span></span></pre>
+            <div class="viewer__tags"><span class="tag">Portable Text</span><span class="tag">Live Preview</span></div>
+          </div>
+
+          <div class="viewer__pane" data-pane="perf">
+            <pre class="code"><span class="cl"><span class="tw" style="--s:30;--dur:.39s;--d:0s"><span class="c-com"># .github/workflows/budget.yml</span></span></span><span class="cl"><span class="tw" style="--s:8;--dur:.16s;--d:.28s"><span class="c-fn">budgets</span>:</span></span><span class="cl"><span class="tw" style="--s:18;--dur:.23s;--d:.40s">  - <span class="c-attr">resourceSizes</span>:</span></span><span class="cl"><span class="tw" style="--s:45;--dur:.58s;--d:.56s">      - { <span class="c-attr">resourceType</span>: <span class="c-str">script</span>, <span class="c-attr">budget</span>: <span class="c-attr">120</span> }</span></span><span class="cl"><span class="tw" style="--s:45;--dur:.58s;--d:.99s">      - { <span class="c-attr">resourceType</span>: <span class="c-str">image</span>,  <span class="c-attr">budget</span>: <span class="c-attr">300</span> }</span></span><span class="cl"><span class="tw" style="--s:12;--dur:.16s;--d:1.41s">  - <span class="c-attr">timings</span>:</span></span><span class="cl"><span class="tw" style="--s:58;--dur:.75s;--d:1.52s">      - { <span class="c-attr">metric</span>: <span class="c-str">largest-contentful-paint</span>, <span class="c-attr">budget</span>: <span class="c-attr">1200</span> }</span></span><span class="cl cl--gap"></span><span class="cl"><span class="tw" style="--s:39;--dur:.51s;--d:2.06s"><span class="c-str">✓ 14 Checks passed — Deploy freigegeben</span></span></span></pre>
+            <div class="viewer__tags"><span class="tag">Lighthouse CI</span><span class="tag">Playwright</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Arbeiten -->
+  <section class="section" id="arbeiten">
+    <div class="section__head section__head--split reveal">
+      <div>
+        <div class="eyebrow">Ausgewählte Arbeiten</div>
+        <h2 class="h2 h2--left">Sechs Wochen später<br>ist es online.</h2>
+      </div>
+      <a class="link-underline" href="#kontakt">Alle 140 Projekte →</a>
+    </div>
+
+    <div class="cases" id="cases">
+      <a class="case" href="#arbeiten">
+        <span class="case__num">01</span>
+        <span class="case__name">Voltmark</span>
+        <span class="case__desc">B2B-Plattform · Relaunch &amp; Design-System</span>
+        <span class="case__kpi">+118% Traffic</span>
+        <span class="case__year">2026<span class="case__arrow">↗</span></span>
+      </a>
+      <a class="case" href="#arbeiten">
+        <span class="case__num">02</span>
+        <span class="case__name">Halden Studio</span>
+        <span class="case__desc">Portfolio · Editorial &amp; Motion</span>
+        <span class="case__kpi">Awwwards Honorable</span>
+        <span class="case__year">2025<span class="case__arrow">↗</span></span>
+      </a>
+      <a class="case" href="#arbeiten">
+        <span class="case__num">03</span>
+        <span class="case__name">Nordkap Bank</span>
+        <span class="case__desc">Finanzportal · Barrierefreiheit AA</span>
+        <span class="case__kpi">0,6 s LCP</span>
+        <span class="case__year">2025<span class="case__arrow">↗</span></span>
+      </a>
+      <a class="case" href="#arbeiten">
+        <span class="case__num">04</span>
+        <span class="case__name">Ferrum GmbH</span>
+        <span class="case__desc">Industrie · Headless-Migration</span>
+        <span class="case__kpi">−72% Pflegeaufwand</span>
+        <span class="case__year">2024<span class="case__arrow">↗</span></span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Prozess -->
+  <section class="section" id="prozess">
+    <div class="process reveal">
+      <div class="eyebrow">Prozess</div>
+      <h2 class="h2 h2--plain">Transparent von Kickoff bis Launch.</h2>
+      <div class="steps">
+        <div class="step step--active">
+          <div class="step__label">WOCHE 1</div>
+          <h4 class="step__title">Discovery</h4>
+          <p class="step__text">Workshop, Wettbewerb, Analytics-Audit. Am Ende steht eine Positionierung, kein Moodboard.</p>
+        </div>
+        <div class="step">
+          <div class="step__label">WOCHE 2–3</div>
+          <h4 class="step__title">Design-System</h4>
+          <p class="step__text">Art Direction plus Komponenten-Bibliothek. Zwei Richtungen, eine Entscheidung.</p>
+        </div>
+        <div class="step">
+          <div class="step__label">WOCHE 4–5</div>
+          <h4 class="step__title">Build</h4>
+          <p class="step__text">Preview-Deploy ab Tag eins. Sie sehen jeden Stand, nicht nur das Ergebnis.</p>
+        </div>
+        <div class="step">
+          <div class="step__label">WOCHE 6</div>
+          <h4 class="step__title">Launch &amp; Care</h4>
+          <p class="step__text">Redaktions-Schulung, Monitoring, Quartals-Review. Wir bleiben erreichbar.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonial -->
+  <section class="section">
+    <div class="quote-grid reveal">
+      <blockquote class="quote">
+        <p>„Die erste Agentur, bei der Design und Technik nicht gegeneinander gearbeitet haben. Unsere Anfragen haben sich im ersten Quartal <span class="accent">verdoppelt.</span>“</p>
+        <footer>
+          <span class="avatar">MB</span>
+          <span class="quote__author">Marlene Böhm<br><span>Head of Marketing, Voltmark GmbH</span></span>
+        </footer>
+      </blockquote>
+      <div class="kpis">
+        <div class="kpi"><div class="kpi__value">+118%</div><div class="kpi__label">Organischer Traffic</div></div>
+        <div class="kpi"><div class="kpi__value">0,8 s</div><div class="kpi__label">LCP mobil</div></div>
+        <div class="kpi"><div class="kpi__value">−64%</div><div class="kpi__label">Absprungrate</div></div>
+        <div class="kpi"><div class="kpi__value">6 Wo.</div><div class="kpi__label">Bis Livegang</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Kontakt -->
+  <section class="section section--cta" id="kontakt">
+    <div class="cta">
+      <div class="cta__glow"></div>
+      <div class="cta__inner">
+        <div class="eyebrow">Nächster Slot: Oktober 2026</div>
+        <h2 class="h2 h2--xl">Reden wir über Ihr nächstes Projekt.</h2>
+        <p class="cta__lead">30 Minuten, unverbindlich. Danach wissen Sie, was Ihr Vorhaben kostet und wie lange es dauert.</p>
+        <div class="cta__actions">
+          <a class="btn btn--primary" href="mailto:hallo@krenzer.design">Termin buchen</a>
+          <a class="btn btn--ghost btn--mono" href="mailto:hallo@krenzer.design">hallo@krenzer.design</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer__grid">
+      <div>
+        <div class="brand">
+          <span class="brand__mark">K</span>
+          <span class="brand__name">Krenzer Design</span>
+        </div>
+        <p class="footer__about">Studio für Markenauftritte und Web-Interfaces. Würzburg &amp; remote.</p>
+      </div>
+      <div class="footer__col">
+        <div class="footer__label">Studio</div>
+        <a href="#leistungen">Leistungen</a>
+        <a href="#arbeiten">Arbeiten</a>
+        <a href="#prozess">Prozess</a>
+      </div>
+      <div class="footer__col">
+        <div class="footer__label">Kontakt</div>
+        <a href="mailto:hallo@krenzer.design">hallo@krenzer.design</a>
+        <a href="tel:+4993112345">+49 931 123 45</a>
+        <a href="#kontakt">LinkedIn</a>
+      </div>
+      <div class="footer__col">
+        <div class="footer__label">Rechtliches</div>
+        <a href="#kontakt">Impressum</a>
+        <a href="#kontakt">Datenschutz</a>
+        <a href="#kontakt">Barrierefreiheit</a>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2026 Krenzer Design GmbH</span>
+      <span>Gebaut in Würzburg</span>
+    </div>
+  </footer>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
