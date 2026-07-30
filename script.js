@@ -88,6 +88,36 @@ export function initInteractions() {
     t.addEventListener("click", function () { selectTab(t.dataset.tab); });
   });
 
+  /* --- Liquid Glass: Reflex folgt dem Zeiger ----------------------------- */
+  /* Delegiert an der Seite, nicht an den Flächen selbst: Karten und Tags
+     werden aus dem CMS neu geschrieben, die Seite bleibt stehen.
+     Das Gegenstück steht in styles.css als ::after auf denselben Klassen. */
+  var GLASS_SELECTOR = ".card, .kpi, .btn--ghost, .tag";
+
+  if (page && !reduceMotion && window.matchMedia("(pointer: fine)").matches) {
+    var glassRaf = null;
+    var glassEl = null;
+    var glassX = 50;
+    var glassY = 0;
+
+    page.addEventListener("mousemove", function (e) {
+      var el = e.target.closest(GLASS_SELECTOR);
+      if (!el) return;
+
+      var r = el.getBoundingClientRect();
+      glassEl = el;
+      glassX = ((e.clientX - r.left) / r.width) * 100;
+      glassY = ((e.clientY - r.top) / r.height) * 100;
+
+      if (glassRaf) return;
+      glassRaf = requestAnimationFrame(function () {
+        glassRaf = null;
+        glassEl.style.setProperty("--mx", glassX.toFixed(1) + "%");
+        glassEl.style.setProperty("--my", glassY.toFixed(1) + "%");
+      });
+    });
+  }
+
   /* --- Case-Liste: nicht gehoverte Zeilen abdunkeln ---------------------- */
   var cases = document.getElementById("cases");
   cases.addEventListener("mouseenter", function () { cases.classList.add("is-hovered"); });

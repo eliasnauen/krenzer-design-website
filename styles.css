@@ -22,6 +22,108 @@
   --gutter: clamp(20px, 4vw, 32px);
   --ease: cubic-bezier(.2, .8, .2, 1);
 
+  /* ---- Liquid Glass -------------------------------------------------------
+     Ein Material, zwei Scheiben. Die Sättigung ist das, was Glas von bloßer
+     Unschärfe unterscheidet: Farbe hinter der Scheibe wird kräftiger. */
+  --glass-filter: blur(20px) saturate(180%) brightness(1.06);
+
+  /* Dünne Scheibe – kleine Bedienelemente. Der Radius muss zur Fläche passen:
+     20px Unschärfe auf einer 30px hohen Pille wäre nur noch Milchglas. */
+  --glass-filter-thin: blur(11px) saturate(190%) brightness(1.07);
+
+  /* Das Material ist farblos. Farbe kommt ausschließlich von dem, was hinter
+     der Scheibe liegt — die Sättigung im Filter holt sie hervor. Sobald die
+     abgewandte Seite selbst eine Farbe mitbringt, wirkt das Glas eingefärbt
+     statt durchsichtig. Deshalb hier durchweg Weiß in fallender Deckkraft. */
+
+  /* Helle Scheibe – für Flächen, die auf dunklem Grund liegen. */
+  --glass-tint: linear-gradient(148deg,
+    rgba(255, 255, 255, .085) 0%,
+    rgba(255, 255, 255, .028) 34%,
+    rgba(255, 255, 255, .012) 62%,
+    rgba(255, 255, 255, .032) 100%);
+
+  /* Angehoben – Hover und aktive Zustände. */
+  --glass-tint-hi: linear-gradient(148deg,
+    rgba(255, 255, 255, .17) 0%,
+    rgba(255, 255, 255, .07) 44%,
+    rgba(255, 255, 255, .09) 100%);
+
+  /* Kaum Gewicht – Flächen, die schon auf einer Scheibe liegen. */
+  --glass-tint-thin: linear-gradient(148deg,
+    rgba(255, 255, 255, .062) 0%,
+    rgba(255, 255, 255, .022) 46%,
+    rgba(255, 255, 255, .028) 100%);
+
+  /* Flache Scheibe – große Flächen. Je größer das Element, desto eher liest
+     sich ein Verlauf darin als Schmutz statt als Licht. Deshalb tragen hier
+     Kante und Schatten die Form, die Fläche selbst bleibt fast gleichmäßig. */
+  --glass-tint-panel: linear-gradient(160deg,
+    rgba(255, 255, 255, .040) 0%,
+    rgba(255, 255, 255, .030) 55%,
+    rgba(255, 255, 255, .024) 100%);
+
+  /* Dunkle Scheibe – für große Panels, in denen Text und Code stehen müssen. */
+  --glass-tint-deep: linear-gradient(172deg,
+    rgba(20, 20, 24, .80) 0%,
+    rgba(15, 15, 19, .82) 60%,
+    rgba(12, 12, 15, .84) 100%);
+
+  /* Specular-Kante: ein Lichtreflex, keine Umrandung. Deshalb nur oben links
+     ein Ansatz, der schnell abfällt — unten rechts bleibt ein schwacher Rest,
+     der die Form schließt. */
+  --glass-rim: linear-gradient(150deg,
+    rgba(255, 255, 255, .22) 0%,
+    rgba(255, 255, 255, .06) 22%,
+    rgba(255, 255, 255, .015) 48%,
+    rgba(255, 255, 255, .08) 100%);
+
+  --glass-rim-soft: linear-gradient(150deg,
+    rgba(255, 255, 255, .14) 0%,
+    rgba(255, 255, 255, .04) 26%,
+    rgba(255, 255, 255, .01) 55%,
+    rgba(255, 255, 255, .055) 100%);
+
+  /* Große Panels: hier darf die Kante deutlich brennen. Sie ist das, was von
+     der Form übrig bleibt, wenn die Fläche selbst kaum noch Verlauf hat. */
+  --glass-rim-strong: linear-gradient(150deg,
+    rgba(255, 255, 255, .46) 0%,
+    rgba(255, 255, 255, .13) 17%,
+    rgba(255, 255, 255, .025) 44%,
+    rgba(255, 255, 255, .07) 72%,
+    rgba(255, 255, 255, .20) 100%);
+
+  /* Lichtkante oben, schwaches Rücklicht unten, Linse zum Rand hin. */
+  --glass-edge-thin:
+    inset 0 1px 0 rgba(255, 255, 255, .11),
+    inset 0 -1px 0 rgba(255, 255, 255, .03),
+    inset 0 0 14px -8px rgba(255, 255, 255, .15);
+
+  /* Große Panels: kräftige Lichtkante, aber der Übergang zur Fläche bleibt
+     kurz. Das Licht bricht sich in der Dicke der Scheibe — das sind ein paar
+     Pixel, nicht ein Drittel des Panels. Läuft es weiter hinein, liest es
+     sich als Verlauf im Hintergrund statt als Kante. */
+  --glass-edge-strong:
+    inset 0 1px 0 rgba(255, 255, 255, .17),
+    inset 0 -1px 0 rgba(255, 255, 255, .05),
+    inset 0 9px 14px -12px rgba(255, 255, 255, .3),
+    inset 0 -11px 16px -14px rgba(255, 255, 255, .14),
+    inset 0 0 16px -10px rgba(255, 255, 255, .07);
+
+  /* Drei Entfernungen: Kontakt, Abheben, Raum. */
+  --shadow-panel:
+    0 2px 5px rgba(0, 0, 0, .55),
+    0 22px 48px -24px rgba(0, 0, 0, .95),
+    0 70px 150px -50px rgba(0, 0, 0, 1);
+
+  --shadow-card:
+    0 1px 3px rgba(0, 0, 0, .5),
+    0 14px 32px -20px rgba(0, 0, 0, .95),
+    0 40px 90px -45px rgba(0, 0, 0, 1);
+
+  /* Fast unsichtbar — die Form trägt die Specular-Kante, nicht diese Linie. */
+  --glass-border: 1px solid rgba(255, 255, 255, .03);
+
   --font-sans: "Instrument Sans", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 }
@@ -49,7 +151,14 @@ a:hover { color: #A8D2FF; }
 
 ::-webkit-scrollbar { width: 9px; }
 ::-webkit-scrollbar-track { background: var(--surface-0); }
-::-webkit-scrollbar-thumb { background: #2A2A2E; border-radius: 99px; }
+/* Der Thumb kann keinen backdrop-filter tragen — also die Tönung direkt,
+   mit derselben Lichtkante wie die übrigen Flächen. */
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(255, 255, 255, .16), rgba(255, 255, 255, .07));
+  border-radius: 99px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .22);
+}
+::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, rgba(255, 255, 255, .24), rgba(255, 255, 255, .12)); }
 
 :focus-visible {
   outline: 2px solid var(--accent);
@@ -64,7 +173,13 @@ a:hover { color: #A8D2FF; }
   z-index: 100;
   padding: 10px 16px;
   border-radius: 999px;
-  background: var(--text-1);
+  /* Helle Scheibe statt Tönung: der Kontrast zum Text muss auch dann tragen,
+     wenn dahinter ein Glow liegt. */
+  background: linear-gradient(180deg, rgba(255, 255, 255, .94), rgba(232, 232, 238, .86));
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
+          backdrop-filter: blur(14px) saturate(180%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .9),
+              0 12px 30px -14px rgba(0, 0, 0, 1);
   color: #0A0A0C;
   font-size: 14px;
   font-weight: 500;
@@ -93,6 +208,201 @@ a:hover { color: #A8D2FF; }
 .cards .reveal:nth-child(3) { transition-delay: .14s; }
 .cards .reveal:nth-child(4) { transition-delay: .21s; }
 
+/* ---------- Liquid Glass ------------------------------------------------- */
+
+/* Das Material für alle Flächen mit eigenem Hintergrund. Vier Schichten,
+   von hinten nach vorn:
+     1. was hinter der Scheibe liegt (Glows, Cursor-Spotlight)
+     2. der gebrochene Hintergrund (backdrop-filter)
+     3. Tönung und Lichtkanten (background + inset-Schatten)
+     4. Specular-Kante (::before), bei allem, was der Zeiger erreicht,
+        zusätzlich ein wandernder Reflex (::after)
+
+   Glas liegt auf Inhalt, nie auf Glas. Deshalb brechen nur die Flächen den
+   Hintergrund, die direkt auf der Seite liegen (Gruppe 1). Was in einem Panel
+   sitzt — Tags, Meter, Punkte, aktive Tabs —, bekommt Tönung und Lichtkante,
+   aber keine zweite Scheibe (Gruppe 2): eine Unschärfe über einer Unschärfe
+   ergibt nur Grau und kostet doppelt Rasterzeit.
+
+   Die großen Panels bekommen die dunkle Scheibe, damit Text lesbar bleibt. */
+
+/* --- Gruppe 1: Flächen auf der Seite — volle Scheibe --------------------- */
+
+.card,
+.kpi,
+.window,
+.stack__panel,
+.cta,
+.header,
+.process,
+.marquee-section,
+.badge,
+.btn--ghost,
+.avatar {
+  isolation: isolate;
+  background: var(--glass-tint);
+  -webkit-backdrop-filter: var(--glass-filter);
+          backdrop-filter: var(--glass-filter);
+}
+
+/* position kommt getrennt: .header ist sticky, .progress fixed — die dürfen
+   sich das nicht von einer Sammelregel überschreiben lassen. */
+.card,
+.kpi,
+.window,
+.stack__panel,
+.cta,
+.process,
+.marquee-section,
+.badge,
+.btn--ghost,
+.avatar,
+.tag,
+.pill-live,
+.viewer__tags { position: relative; }
+
+/* --- Gruppe 2: Flächen auf Glas — nur Tönung und Kante ------------------- */
+
+.tag,
+.pill-live,
+.meter,
+.dot,
+.stack__viewer,
+.viewer__tags,
+.progress {
+  isolation: isolate;
+  background: var(--glass-tint);
+}
+
+/* --- Stärken ------------------------------------------------------------- */
+
+/* Die großen Flächen: flache Tönung, dafür Kante und Lichteinfall kräftig.
+   Der Header bleibt außen vor — er liegt über dem Inhalt, dort würde eine
+   brennende Kante als zweite Trennlinie unter der Navigation lesen. */
+.card,
+.kpi { --glass-tint: var(--glass-tint-panel); }
+
+.window,
+.stack__panel,
+.cta,
+.header,
+.process,
+.stack__viewer {
+  --glass-tint: var(--glass-tint-deep);
+  --glass-rim: var(--glass-rim-soft);
+}
+
+.card,
+.kpis,
+.window,
+.stack__panel,
+.cta,
+.process { --glass-rim: var(--glass-rim-strong); }
+
+.badge,
+.btn--ghost,
+.avatar,
+.marquee-section {
+  --glass-filter: var(--glass-filter-thin);
+}
+
+.tag,
+.meter,
+.dot,
+.viewer__tags {
+  --glass-tint: var(--glass-tint-thin);
+  --glass-rim: var(--glass-rim-soft);
+}
+
+/* --- Specular-Kante ------------------------------------------------------ */
+/* Ein Lichtreflex entlang der Form, keine Umrandung: 1px Innenabstand, per
+   Maske ausgestanzt, damit die Fläche selbst frei bleibt. */
+
+.card::before,
+.kpis::before,
+.window::before,
+.stack__panel::before,
+.cta::before,
+.process::before,
+.badge::before,
+.btn--ghost::before,
+.tag::before,
+.pill-live::before,
+.avatar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  padding: 1px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: var(--glass-rim);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask-composite: exclude;
+  transition: opacity .35s;
+}
+
+/* --- Wandernder Reflex --------------------------------------------------- */
+/* Position kommt aus script.js. Der Radius skaliert mit der Fläche: ein
+   220px-Lichtfleck auf einer Pille wäre nur ein heller Fleck ohne Bewegung. */
+
+.card,
+.kpi,
+.btn--ghost,
+.tag {
+  --mx: 50%;
+  --my: 0%;
+}
+
+.card::after,
+.kpi::after,
+.btn--ghost::after,
+.tag::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(var(--reflex, 220px) circle at var(--mx) var(--my),
+              rgba(255, 255, 255, .10), transparent 68%);
+  opacity: 0;
+  transition: opacity .45s var(--ease);
+}
+
+.card:hover::after,
+.kpi:hover::after,
+.btn--ghost:hover::after,
+.tag:hover::after { opacity: 1; }
+
+.btn--ghost { --reflex: 130px; }
+.tag { --reflex: 70px; }
+
+/* Ohne backdrop-filter (ältere Browser) bleiben deckende Flächen. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .card, .kpi, .badge, .btn--ghost, .avatar { background: var(--glass-tint), var(--surface-1); }
+  .window, .stack__panel, .cta, .header, .process { background: #0E0E11; }
+  .marquee-section { background: linear-gradient(180deg, rgba(255, 255, 255, .02), transparent); }
+}
+
+/* Systemeinstellung „Transparenz reduzieren“ respektieren. */
+@media (prefers-reduced-transparency: reduce) {
+  .cards::before { display: none; }
+  .card, .kpi, .window, .stack__panel, .cta, .header, .process,
+  .marquee-section, .badge, .btn--ghost, .avatar, .skip-link,
+  .cases.is-hovered .case:hover {
+    -webkit-backdrop-filter: none;
+            backdrop-filter: none;
+  }
+  .card, .kpi, .badge, .btn--ghost, .avatar { background: var(--surface-1); }
+  .window, .stack__panel, .cta, .header, .process { background: #0E0E11; }
+  .stack__viewer { background: #08080A; }
+  .skip-link { background: var(--text-1); }
+  .card::after, .kpi::after, .btn--ghost::after, .tag::after { display: none; }
+}
+
 /* ---------- Layout-Rahmen ------------------------------------------------ */
 
 .page { position: relative; min-height: 100vh; background: var(--surface-0); overflow: hidden; }
@@ -102,14 +412,17 @@ a:hover { color: #A8D2FF; }
   inset: 0 0 auto 0;
   height: 2px;
   z-index: 60;
-  background: rgba(255, 255, 255, .06);
+  /* 2px hoch und fixiert: eine Scheibe wäre unsichtbar, würde aber bei jedem
+     Scroll-Frame den Hintergrund neu greifen. Also nur die Tönung. */
+  --glass-tint: rgba(255, 255, 255, .06);
 }
 .progress__bar {
   display: block;
   height: 100%;
   width: 0;
   background: linear-gradient(90deg, rgba(111, 180, 255, .5), var(--text-1));
-  box-shadow: 0 0 12px rgba(255, 255, 255, .45);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .8),
+              0 0 12px rgba(255, 255, 255, .45);
   transition: width .12s linear;
 }
 
@@ -152,10 +465,8 @@ a:hover { color: #A8D2FF; }
   position: sticky;
   top: 0;
   z-index: 40;
-  backdrop-filter: saturate(180%) blur(22px);
-  -webkit-backdrop-filter: saturate(180%) blur(22px);
-  background: rgba(10, 10, 12, .66);
   border-bottom: 1px solid var(--line-soft);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05);
 }
 .header__inner {
   max-width: var(--shell);
@@ -178,7 +489,10 @@ a:hover { color: #A8D2FF; }
   display: grid; place-items: center;
   color: #0A0A0C;
   font-weight: 600; font-size: 14px; letter-spacing: -.04em;
-  box-shadow: 0 1px 0 rgba(255, 255, 255, .6) inset, 0 6px 16px -6px rgba(0, 0, 0, .9);
+  /* Deckend wie der Primärbutton: Glanz auf der Oberfläche statt Durchsicht. */
+  box-shadow: 0 1px 0 rgba(255, 255, 255, .75) inset,
+              0 -1px 0 rgba(0, 0, 0, .18) inset,
+              0 6px 16px -6px rgba(0, 0, 0, .9);
 }
 .brand__name { font-weight: 500; font-size: 15.5px; letter-spacing: -.02em; white-space: nowrap; }
 
@@ -254,32 +568,39 @@ a:hover { color: #A8D2FF; }
   animation: km-shimmer 4.5s ease-in-out infinite;
   pointer-events: none;
 }
+/* Deckend, weil der Kontrast tragen muss — das Glas zeigt sich hier als
+   Glanz auf der Oberfläche statt als Durchsicht. */
+.btn--primary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(255, 255, 255, .85) 0%, rgba(255, 255, 255, .12) 42%, rgba(255, 255, 255, 0) 62%);
+}
 
 .btn--ghost {
-  border: 1px solid rgba(255, 255, 255, .14);
-  background: rgba(255, 255, 255, .04);
-  backdrop-filter: blur(10px);
+  border: var(--glass-border);
   color: var(--text-1);
+  box-shadow: var(--glass-edge-thin), 0 14px 32px -18px rgba(0, 0, 0, 1);
 }
 .btn--ghost:hover {
+  --glass-tint: var(--glass-tint-hi);
   color: var(--text-1);
-  background: rgba(255, 255, 255, .09);
-  border-color: rgba(255, 255, 255, .26);
   transform: translateY(-2px);
+  box-shadow: var(--glass-edge-thin), 0 22px 44px -20px rgba(0, 0, 0, 1);
 }
 .btn--mono { font-family: var(--font-mono); font-size: 14.5px; padding: 15px 24px; }
 
 .btn--sm {
   font-size: 14px;
   padding: 8px 17px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, .14), rgba(255, 255, 255, .06));
-  box-shadow: 0 1px 0 rgba(255, 255, 255, .16) inset, 0 8px 24px -12px rgba(0, 0, 0, .9);
+  --glass-tint: linear-gradient(148deg,
+    rgba(255, 255, 255, .13) 0%,
+    rgba(255, 255, 255, .05) 48%,
+    rgba(255, 255, 255, .055) 100%);
 }
-.btn--sm:hover {
-  background: linear-gradient(180deg, rgba(255, 255, 255, .2), rgba(255, 255, 255, .1));
-  color: #fff;
-  transform: translateY(-1px);
-}
+.btn--sm:hover { color: #fff; transform: translateY(-1px); }
 
 /* ---------- Hero --------------------------------------------------------- */
 
@@ -297,14 +618,12 @@ a:hover { color: #A8D2FF; }
   align-items: center;
   gap: 9px;
   padding: 6px 14px 6px 9px;
-  border: 1px solid rgba(255, 255, 255, .1);
+  border: var(--glass-border);
   border-radius: 999px;
-  background: rgba(255, 255, 255, .05);
-  backdrop-filter: blur(12px);
   font-size: 12.5px;
   color: var(--text-soft);
   white-space: nowrap;
-  box-shadow: 0 1px 0 rgba(255, 255, 255, .1) inset;
+  box-shadow: var(--glass-edge-thin), 0 10px 26px -16px rgba(0, 0, 0, 1);
 }
 .badge__dot {
   position: relative;
@@ -364,13 +683,9 @@ a:hover { color: #A8D2FF; }
   pointer-events: none;
 }
 .window {
-  position: relative;
-  border: 1px solid rgba(255, 255, 255, .11);
+  border: var(--glass-border);
   border-radius: 22px;
-  background: linear-gradient(180deg, rgba(28, 28, 32, .92), rgba(12, 12, 14, .96));
-  box-shadow: 0 1px 0 rgba(255, 255, 255, .09) inset,
-              0 60px 140px -50px rgba(0, 0, 0, 1),
-              0 20px 60px -30px rgba(0, 0, 0, .9);
+  box-shadow: var(--glass-edge-strong), var(--shadow-panel);
   overflow: hidden;
   text-align: left;
 }
@@ -382,7 +697,15 @@ a:hover { color: #A8D2FF; }
   border-bottom: 1px solid var(--line-soft);
   background: linear-gradient(180deg, rgba(255, 255, 255, .045), rgba(255, 255, 255, .012));
 }
-.dot { width: 10px; height: 10px; border-radius: 99px; background: #35353A; }
+/* Glasperlen: Tönung, Lichtkante oben, Rücklicht unten. */
+.dot {
+  width: 10px; height: 10px;
+  border-radius: 99px;
+  --glass-tint: linear-gradient(180deg, rgba(255, 255, 255, .16), rgba(255, 255, 255, .05));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .3),
+              inset 0 -1px 1px rgba(255, 255, 255, .07),
+              0 1px 2px rgba(0, 0, 0, .6);
+}
 .window__title {
   margin: 0 auto;
   font-family: var(--font-mono);
@@ -393,10 +716,18 @@ a:hover { color: #A8D2FF; }
   font-family: var(--font-mono);
   font-size: 10.5px;
   color: var(--accent);
-  border: 1px solid rgba(10, 132, 255, .32);
-  background: rgba(10, 132, 255, .1);
+  border: 1px solid rgba(10, 132, 255, .22);
   border-radius: 6px;
   padding: 2px 8px;
+  /* Getöntes Glas: die Farbe sitzt in der Scheibe, nicht als Fläche darunter.
+     Die abgewandte Seite bleibt trotzdem farblos — sonst leuchtet die Pille
+     rundum, statt Licht von einer Seite zu bekommen. */
+  --glass-tint: linear-gradient(160deg, rgba(10, 132, 255, .26), rgba(10, 132, 255, .09));
+  --glass-rim: linear-gradient(150deg,
+    rgba(180, 215, 255, .5) 0%,
+    rgba(120, 175, 255, .12) 40%,
+    rgba(255, 255, 255, .12) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .14);
 }
 .window__body { display: grid; grid-template-columns: 1.15fr .85fr; }
 
@@ -416,7 +747,8 @@ a:hover { color: #A8D2FF; }
   margin-top: 7px;
   height: 4px;
   border-radius: 99px;
-  background: rgba(255, 255, 255, .09);
+  --glass-tint: linear-gradient(180deg, rgba(255, 255, 255, .04), rgba(255, 255, 255, .1));
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .5), inset 0 -1px 0 rgba(255, 255, 255, .06);
   overflow: hidden;
 }
 .meter__fill {
@@ -425,6 +757,7 @@ a:hover { color: #A8D2FF; }
   height: 100%;
   border-radius: 99px;
   background: linear-gradient(90deg, #4E7FCB, #DCE3F0);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .45);
   transition: width var(--dur, 3s) cubic-bezier(.16, 1, .3, 1) var(--delay, 0s);
 }
 .is-mounted .meter__fill { width: var(--w); }
@@ -480,7 +813,11 @@ a:hover { color: #A8D2FF; }
   padding: 34px 0;
   border-top: 1px solid var(--line-soft);
   border-bottom: 1px solid var(--line-soft);
-  background: linear-gradient(180deg, rgba(255, 255, 255, .02), transparent);
+  /* Eine Scheibe über die ganze Breite — der Streifen soll das Raster
+     dahinter brechen, ohne es zu verdecken. */
+  --glass-tint: linear-gradient(180deg, rgba(255, 255, 255, .05), rgba(255, 255, 255, .012));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .06),
+              inset 0 -1px 0 rgba(255, 255, 255, .02);
 }
 .marquee-section__label {
   max-width: var(--shell);
@@ -571,26 +908,73 @@ a:hover { color: #A8D2FF; }
 /* ---------- Leistungs-Karten --------------------------------------------- */
 
 .cards {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 18px;
   margin-top: 60px;
 }
+
+/* Weicher Schein hinter dem Raster. Das Cursor-Spotlight liefert das nur an
+   Geraeten mit Maus - dieser Schein sorgt dafuer, dass das Glas ueberall traegt. */
+.cards::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -14% -8%;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 55% 50% at 28% 22%, rgba(92, 122, 190, .17), transparent 70%),
+    radial-gradient(ellipse 50% 50% at 84% 80%, rgba(60, 80, 130, .13), transparent 72%);
+  filter: blur(34px);
+}
+
 .card {
-  position: relative;
-  border: 1px solid var(--line);
+  /* Position des Reflexes; wird bei Mausbewegung aus script.js gesetzt. */
+  --mx: 50%;
+  --my: 0%;
+
+  border: var(--glass-border);
   border-radius: 22px;
   padding: clamp(26px, 3vw, 36px);
-  background: linear-gradient(180deg, rgba(255, 255, 255, .055), rgba(255, 255, 255, .012));
-  box-shadow: 0 1px 0 rgba(255, 255, 255, .07) inset, 0 30px 70px -40px rgba(0, 0, 0, 1);
+  box-shadow: var(--glass-edge-strong), var(--shadow-card);
   transition: border-color .35s, transform .35s var(--ease), box-shadow .35s,
               opacity .8s var(--ease);
 }
-.card:hover {
-  border-color: rgba(255, 255, 255, .22);
-  transform: translateY(-4px);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, .1) inset, 0 40px 90px -40px rgba(0, 0, 0, 1);
+
+/* Reflex, der dem Zeiger folgt - nur die Karten haben ihn, weil nur sie
+   einzeln angesteuert werden. */
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(220px circle at var(--mx) var(--my),
+              rgba(255, 255, 255, .10), transparent 68%);
+  opacity: 0;
+  transition: opacity .45s var(--ease);
 }
+
+/* Beim Anheben wandert der Schatten weiter weg und wird weicher, die
+   Lichtkante oben wird heller — dieselbe Bewegung, die eine echte Scheibe
+   macht, wenn man sie von der Unterlage abhebt. */
+.card:hover {
+  border-color: rgba(255, 255, 255, .06);
+  transform: translateY(-4px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .26),
+    inset 0 -1px 0 rgba(255, 255, 255, .07),
+    inset 0 9px 14px -12px rgba(255, 255, 255, .38),
+    inset 0 -11px 16px -14px rgba(255, 255, 255, .18),
+    inset 0 0 16px -10px rgba(255, 255, 255, .1),
+    0 3px 8px rgba(0, 0, 0, .5),
+    0 30px 60px -26px rgba(0, 0, 0, .95),
+    0 60px 120px -50px rgba(0, 0, 0, 1);
+}
+.card:hover::after { opacity: 1; }
+
 .card__num { font-family: var(--font-mono); font-size: 11px; color: var(--text-4); letter-spacing: .1em; }
 .card__title { margin: 16px 0 0; font-size: clamp(21px, 2.2vw, 25px); letter-spacing: -.03em; font-weight: 500; color: var(--text-1); }
 .card__text { margin: 12px 0 0; font-size: 15.5px; line-height: 1.62; color: var(--text-2); }
@@ -599,11 +983,14 @@ a:hover { color: #A8D2FF; }
 .tag {
   font-size: 12px;
   color: var(--text-soft);
-  border: 1px solid rgba(255, 255, 255, .11);
-  background: rgba(255, 255, 255, .04);
+  border: var(--glass-border);
   border-radius: 999px;
   padding: 5px 11px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .09),
+              inset 0 -1px 0 rgba(255, 255, 255, .022);
+  transition: color .3s;
 }
+.tag:hover { color: var(--text-1); }
 
 /* ---------- Stack -------------------------------------------------------- */
 
@@ -616,13 +1003,11 @@ a:hover { color: #A8D2FF; }
   pointer-events: none;
 }
 .stack__panel {
-  position: relative;
   display: grid;
   grid-template-columns: .82fr 1.18fr;
-  border: 1px solid rgba(255, 255, 255, .1);
+  border: var(--glass-border);
   border-radius: 24px;
-  background: linear-gradient(170deg, rgba(26, 26, 30, .94), rgba(11, 11, 13, .97));
-  box-shadow: 0 1px 0 rgba(255, 255, 255, .08) inset, 0 60px 140px -50px rgba(0, 0, 0, 1);
+  box-shadow: var(--glass-edge-strong), var(--shadow-panel);
   overflow: hidden;
 }
 .stack__side {
@@ -632,6 +1017,9 @@ a:hover { color: #A8D2FF; }
   flex-direction: column;
   gap: 8px;
 }
+/* Bewusst kein Glas: die Tabs sind eine Auswahl, kein Material. Was hier
+   zählt, ist die Frage „welcher ist es?" — und die beantwortet eine ruhige
+   Fläche mit klarer Kante schneller als ein Lichtspiel. */
 .tab {
   text-align: left;
   background: transparent;
@@ -641,13 +1029,12 @@ a:hover { color: #A8D2FF; }
   cursor: pointer;
   font-family: var(--font-sans);
   color: inherit;
-  transition: background .3s, border-color .3s, box-shadow .3s;
+  transition: background .25s, border-color .25s;
 }
-.tab:hover { background: rgba(255, 255, 255, .07); }
+.tab:hover { background: #16161A; }
 .tab.is-active {
-  background: linear-gradient(180deg, rgba(255, 255, 255, .11), rgba(255, 255, 255, .04));
-  border-color: rgba(255, 255, 255, .18);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, .14) inset, 0 16px 34px -22px rgba(0, 0, 0, 1);
+  background: #1B1B20;
+  border-color: rgba(255, 255, 255, .12);
 }
 .tab__head { display: flex; align-items: center; gap: 10px; }
 .tab__num { font-family: var(--font-mono); font-size: 11px; color: var(--accent); }
@@ -662,7 +1049,15 @@ a:hover { color: #A8D2FF; }
   line-height: 1.8;
 }
 
-.stack__viewer { position: relative; background: rgba(8, 8, 10, .6); min-height: 430px; }
+/* Liegt schon auf dem Panel-Glas: nur eine dunklere Tönung, keine zweite
+   Scheibe — der Code darüber muss ruhig stehen. */
+.stack__viewer {
+  position: relative;
+  --glass-tint: linear-gradient(172deg, rgba(8, 8, 11, .56), rgba(6, 6, 9, .6));
+  min-height: 430px;
+  box-shadow: inset 1px 0 0 rgba(255, 255, 255, .06),
+              inset 0 9px 14px -13px rgba(255, 255, 255, .3);
+}
 .viewer__bar {
   display: flex;
   align-items: center;
@@ -690,7 +1085,7 @@ a:hover { color: #A8D2FF; }
   gap: 8px;
   padding: 16px 24px;
   border-top: 1px solid var(--line-soft);
-  background: rgba(255, 255, 255, .02);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05);
 }
 
 /* ---------- Arbeiten ----------------------------------------------------- */
@@ -709,10 +1104,15 @@ a:hover { color: #A8D2FF; }
 }
 .case:hover { color: var(--text-1); }
 .cases.is-hovered .case { opacity: .42; }
+/* Nur die eine Zeile unter dem Zeiger bekommt eine Scheibe — deshalb ist der
+   backdrop-filter hier vertretbar, es ist immer genau eine. */
 .cases.is-hovered .case:hover {
   opacity: 1;
   padding-left: 26px;
-  background: linear-gradient(90deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .015));
+  background: linear-gradient(90deg, rgba(255, 255, 255, .07), rgba(255, 255, 255, .012));
+  -webkit-backdrop-filter: var(--glass-filter-thin);
+          backdrop-filter: var(--glass-filter-thin);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .07);
 }
 .case__num { font-family: var(--font-mono); font-size: 12px; color: var(--text-4); }
 .case__name {
@@ -747,13 +1147,15 @@ a:hover { color: #A8D2FF; }
 /* ---------- Prozess ------------------------------------------------------ */
 
 .process {
-  border: 1px solid rgba(255, 255, 255, .1);
+  border: var(--glass-border);
   border-radius: 24px;
   padding: clamp(30px, 5vw, 60px);
-  background:
-    radial-gradient(ellipse 80% 130% at 12% 0%, rgba(90, 110, 160, .2), transparent 62%),
-    linear-gradient(180deg, rgba(24, 24, 28, .9), rgba(10, 10, 12, .96));
-  box-shadow: 0 1px 0 rgba(255, 255, 255, .08) inset, 0 50px 120px -50px rgba(0, 0, 0, 1);
+  /* Die farbige Linse oben links liegt in der Scheibe, nicht darunter. Sie ist
+     jetzt nur noch ein Hauch — die Kante macht die Arbeit. */
+  --glass-tint:
+    radial-gradient(ellipse 80% 130% at 12% 0%, rgba(90, 110, 160, .09), transparent 58%),
+    linear-gradient(172deg, rgba(20, 20, 24, .80), rgba(12, 12, 15, .84));
+  box-shadow: var(--glass-edge-strong), var(--shadow-panel);
 }
 .steps {
   display: grid;
@@ -791,9 +1193,8 @@ a:hover { color: #A8D2FF; }
 .avatar {
   width: 42px; height: 42px;
   border-radius: 99px;
-  background: linear-gradient(160deg, #2C2C31, #16161A);
-  border: 1px solid rgba(255, 255, 255, .12);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, .1) inset;
+  border: var(--glass-border);
+  box-shadow: var(--glass-edge-thin), 0 8px 20px -10px rgba(0, 0, 0, 1);
   display: grid; place-items: center;
   font-family: var(--font-mono);
   font-size: 13px;
@@ -802,39 +1203,40 @@ a:hover { color: #A8D2FF; }
 .quote__author { font-size: 15px; color: var(--text-1); }
 .quote__author span { color: var(--text-4); font-size: 14px; }
 
+/* Eine Scheibe, in vier Felder geteilt: das Material sitzt auf den Kacheln,
+   Kante und Lichtkanten auf dem Rahmen darum. */
 .kpis {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1px;
-  background: var(--line);
-  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, .045);
+  border: var(--glass-border);
   border-radius: 22px;
   overflow: hidden;
-  box-shadow: 0 30px 80px -40px rgba(0, 0, 0, 1);
+  box-shadow: var(--glass-edge-strong), var(--shadow-panel);
 }
-.kpi { background: linear-gradient(180deg, rgba(255, 255, 255, .05), rgba(255, 255, 255, .012)); padding: 30px; }
+.kpi { padding: 30px; }
 .kpi__value { font-size: clamp(28px, 3vw, 34px); letter-spacing: -.04em; font-weight: 500; color: var(--text-1); }
 .kpi__label { margin-top: 6px; font-size: 13.5px; color: var(--text-3); }
 
 /* ---------- CTA ---------------------------------------------------------- */
 
 .cta {
-  position: relative;
-  border: 1px solid rgba(255, 255, 255, .11);
+  border: var(--glass-border);
   border-radius: 28px;
   padding: clamp(56px, 8vw, 96px) clamp(24px, 4vw, 56px);
   text-align: center;
   overflow: hidden;
-  background: linear-gradient(180deg, rgba(26, 26, 30, .94), rgba(9, 9, 11, .97));
-  box-shadow: 0 1px 0 rgba(255, 255, 255, .08) inset, 0 60px 140px -50px rgba(0, 0, 0, 1);
+  box-shadow: var(--glass-edge-strong), var(--shadow-panel);
 }
 .cta__glow {
   position: absolute;
   top: -300px; left: 50%;
   width: min(900px, 140vw); height: 620px;
   transform: translateX(-50%);
-  background: radial-gradient(ellipse at center, rgba(120, 145, 205, .3), transparent 66%);
-  filter: blur(20px);
+  background: radial-gradient(ellipse at center, rgba(120, 145, 205, .2), transparent 66%);
+  filter: blur(24px);
   pointer-events: none;
 }
 .cta__inner { position: relative; }
