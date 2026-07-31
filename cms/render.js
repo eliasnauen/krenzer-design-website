@@ -92,13 +92,8 @@ function renderChrome(settings) {
 /* --- 1 · Kopfbereich ------------------------------------------------------- */
 
 function renderHero(hero) {
-  if (hero.badge) {
-    setHtml(
-      $('.badge'),
-      '<span class="badge__dot"><span class="badge__ring"></span></span>' + escapeText(hero.badge),
-    )
-  }
-
+  // hero.badge wird nicht mehr ausgegeben — der Hinweis über der Überschrift
+  // ist aus dem Kopfbereich entfernt. Das Feld steht noch im Studio.
   setHtml($('.display'), multiline(hero.heading))
   setText($('.hero__lead'), hero.lead)
   setLink($('.hero__actions .btn--primary'), hero.primaryCta)

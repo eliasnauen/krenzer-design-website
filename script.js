@@ -141,6 +141,54 @@ export function initInteractions() {
     Array.prototype.forEach.call(reveals, function (el) { io.observe(el); });
   }
 
+  /* --- Schluss-Section: Zeilen fahren zusammen --------------------------- */
+  /* Die Überschrift kommt als eine Zeile mit <br> aus dem CMS. Hier wird sie
+     in Zeilen zerlegt, die einzeln fahren können — abwechselnd von links und
+     von rechts.
+
+     Kein Scroll-Wert wird durchgereicht: JavaScript schaltet nur is-in um,
+     sobald die Überschrift die Schwelle passiert, und wieder ab, wenn man
+     darüber zurückscrollt. Den Weg dazwischen läuft der CSS-Übergang von
+     selbst und immer ganz. Läuft dieser Block nicht, steht die Überschrift
+     ohne Umweg an ihrem Platz. */
+  var ctaHeading = document.querySelector("#kontakt .h2");
+
+  if (ctaHeading && !reduceMotion) {
+    var lines = ctaHeading.innerHTML.split(/<br\s*\/?>/i)
+      .map(function (part) { return part.trim(); })
+      .filter(Boolean);
+
+    // Keine Zeilenumbrüche gepflegt? Dann in der Mitte der Wörter trennen.
+    if (lines.length < 2) {
+      var words = lines.join(" ").split(/\s+/);
+      var half = Math.ceil(words.length / 2);
+      lines = [words.slice(0, half).join(" "), words.slice(half).join(" ")];
+    }
+
+    ctaHeading.innerHTML = lines
+      .map(function (line) {
+        return '<span class="cta__line"><span class="cta__line-inner">' + line + "</span></span>";
+      })
+      .join("");
+
+    // Ab hier tragen die Zeilen den Verlauf, nicht mehr die Überschrift.
+    ctaHeading.classList.add("is-split");
+
+    /* Die Schwelle liegt bei 84 % der Bildhöhe: die Überschrift ist unten
+       schon ein Stück hereingekommen, bevor die Zeilen loslaufen — aber noch
+       früh genug, dass sie steht, wenn die Section dran ist.
+       Nicht unobserve: der Weg zurück gehört zur Sache. */
+    if ("IntersectionObserver" in window) {
+      var lineIo = new IntersectionObserver(function (entries) {
+        ctaHeading.classList.toggle("is-in", entries[0].isIntersecting);
+      }, { rootMargin: "0px 0px -16% 0px" });
+
+      lineIo.observe(ctaHeading);
+    } else {
+      ctaHeading.classList.add("is-in");
+    }
+  }
+
   /* --- Aktiver Navigationspunkt ------------------------------------------ */
   var navLinks = Array.prototype.slice.call(document.querySelectorAll(".nav a"));
   var sections = navLinks
