@@ -165,7 +165,7 @@ body {
   color: var(--text-1);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 a { color: var(--accent); text-decoration: none; }
@@ -268,8 +268,6 @@ a:hover { color: #A8D2FF; }
           backdrop-filter: var(--glass-filter);
 }
 
-/* position kommt getrennt: .progress ist fixed und darf sich das nicht von
-   einer Sammelregel überschreiben lassen. */
 .card,
 .kpi,
 .window,
@@ -290,8 +288,7 @@ a:hover { color: #A8D2FF; }
 .meter,
 .dot,
 .stack__viewer,
-.viewer__tags,
-.progress {
+.viewer__tags {
   isolation: isolate;
   background: var(--glass-tint);
 }
@@ -443,7 +440,10 @@ a:hover { color: #A8D2FF; }
 
 /* ---------- Layout-Rahmen ------------------------------------------------ */
 
-.page { position: relative; min-height: 100vh; background: var(--surface-0); overflow: hidden; }
+/* overflow: clip, nicht hidden — hidden macht aus der Seite einen eigenen
+   Scroll-Container, und daran klebt die Kopfleiste dann statt am Fenster.
+   clip beschneidet genauso, ohne einen Scrollport aufzumachen. */
+.page { position: relative; min-height: 100vh; background: var(--surface-0); overflow: clip; }
 
 /* Atmosphäre: zum Rand hin verliert der Raum Licht. Der billigste und
    ehrlichste Tiefenreiz überhaupt — nah ist hell, fern ist dunkel.
@@ -460,25 +460,6 @@ a:hover { color: #A8D2FF; }
   z-index: 0;
   pointer-events: none;
   background: radial-gradient(118% 84% at 50% 42%, transparent 55%, rgba(0, 0, 0, .55) 100%);
-}
-
-.progress {
-  position: fixed;
-  inset: 0 0 auto 0;
-  height: 2px;
-  z-index: 60;
-  /* 2px hoch und fixiert: eine Scheibe wäre unsichtbar, würde aber bei jedem
-     Scroll-Frame den Hintergrund neu greifen. Also nur die Tönung. */
-  --glass-tint: rgba(255, 255, 255, .06);
-}
-.progress__bar {
-  display: block;
-  height: 100%;
-  width: 0;
-  background: linear-gradient(90deg, rgba(111, 180, 255, .5), var(--text-1));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .8),
-              0 0 12px rgba(255, 255, 255, .45);
-  transition: width .12s linear;
 }
 
 .spotlight {
@@ -524,13 +505,60 @@ a:hover { color: #A8D2FF; }
 
 /* ---------- Header ------------------------------------------------------- */
 
-/* Keine Fläche, keine Kante, kein Schatten: die Leiste ist nur noch die
-   Anordnung ihrer Elemente. Sie liegt damit direkt auf der Seite — der Inhalt
-   wandert beim Scrollen sichtbar unter ihr durch. */
+/* Über der Hero ist die Leiste nur die Anordnung ihrer Elemente: keine Fläche,
+   keine Kante, kein Schatten. Erst wenn Inhalt darunter durchwandert, legt sich
+   ein Grund dahinter — und der endet nicht an einer Kante, sondern läuft nach
+   unten aus: oben trübe Scheibe, unten wieder freie Sicht.
+
+   Ein einzelner backdrop-filter kann das nicht: Unschärfe lässt sich nicht
+   verlaufen. Also zwei Scheiben übereinander, jede mit eigener Maske — die
+   starke bleibt oben, die schwache reicht weiter herunter. Wo sich beide
+   überlagern, addiert sich die Trübung; der Übergang liest sich als Verlauf. */
 .header {
   position: sticky;
   top: 0;
   z-index: 40;
+}
+.header::before,
+.header::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .5s var(--ease);
+}
+
+/* Untere, schwache Scheibe — reicht am weitesten herunter und trägt die
+   Tönung, damit der Farbverlauf nicht an der Blur-Kante abreißt. */
+.header::before {
+  bottom: -56px;
+  backdrop-filter: blur(7px) saturate(150%);
+  -webkit-backdrop-filter: blur(7px) saturate(150%);
+  background: linear-gradient(180deg,
+    rgba(10, 10, 12, .58) 0%,
+    rgba(10, 10, 12, .34) 46%,
+    rgba(10, 10, 12, 0) 100%);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 42%, transparent 100%);
+          mask-image: linear-gradient(180deg, #000 0%, #000 42%, transparent 100%);
+}
+
+/* Obere, kräftige Scheibe — sitzt nur auf der Höhe der Leiste selbst. */
+.header::after {
+  bottom: -18px;
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, .65) 58%, transparent 100%);
+          mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, .65) 58%, transparent 100%);
+}
+
+.header.is-stuck::before,
+.header.is-stuck::after { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .header::before,
+  .header::after { transition: none; }
 }
 .header__inner {
   max-width: var(--shell);

@@ -1,5 +1,5 @@
 /* Krenzer Design — Interaktionen
-   Scroll-Fortschritt, Cursor-Spotlight, Stack-Tabs, Case-Hover,
+   Kopfleisten-Grund, Cursor-Spotlight, Stack-Tabs, Case-Hover,
    Scroll-Reveal, aktive Navigation.
 
    Wird von main.js aufgerufen, nachdem die Inhalte aus dem CMS im DOM stehen —
@@ -10,13 +10,16 @@ export function initInteractions() {
 
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  /* --- Scroll-Fortschrittsbalken ---------------------------------------- */
-  var bar = document.getElementById("progressBar");
+  /* --- Grund hinter der Kopfleiste --------------------------------------- */
+  /* Sobald die Seite unter der Leiste durchwandert, blendet er ein. Die
+     Schwelle liegt absichtlich niedrig — der Grund soll da sein, bevor der
+     erste Inhalt die Leiste erreicht, nicht erst danach. */
+  var header = document.querySelector(".header");
+  var STUCK_AT = 24;
 
   function onScroll() {
     var el = document.scrollingElement || document.documentElement;
-    var max = el.scrollHeight - el.clientHeight;
-    bar.style.width = (max > 0 ? Math.min(100, (el.scrollTop / max) * 100) : 0) + "%";
+    if (header) header.classList.toggle("is-stuck", el.scrollTop > STUCK_AT);
   }
 
   window.addEventListener("scroll", onScroll, { passive: true });
