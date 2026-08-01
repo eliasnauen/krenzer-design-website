@@ -46,6 +46,57 @@ export function initInteractions() {
     });
   }
 
+  /* --- Tiefenebenen ------------------------------------------------------ */
+  /* Alles mit data-depth ist Licht hinter der Seite und bewegt sich langsamer
+     als sie — je größer der Faktor, desto näher wirkt die Ebene. Gesetzt wird
+     nur --py; wohin das im Element wandert, steht im CSS (bei .cards etwa in
+     das ::before, nicht in die Karten selbst).
+
+     Der Versatz wird begrenzt: sonst zöge das große Glow oben über die ganze
+     Seitenlänge mit nach unten, statt oben zu bleiben. Solange eine Ebene im
+     Bild ist, liegt sie ohnehin unter dieser Grenze. */
+  var depthLayers = Array.prototype.slice.call(document.querySelectorAll("[data-depth]"));
+
+  if (depthLayers.length && !reduceMotion) {
+    var depthItems = [];
+    var depthRaf = null;
+
+    function measureDepth() {
+      // Erst zurücksetzen, sonst misst man die eigene Verschiebung mit.
+      depthLayers.forEach(function (el) { el.style.setProperty("--py", "0px"); });
+
+      depthItems = depthLayers.map(function (el) {
+        var rect = el.getBoundingClientRect();
+        return {
+          el: el,
+          rate: parseFloat(el.getAttribute("data-depth")) || 0,
+          center: rect.top + window.scrollY + rect.height / 2,
+        };
+      });
+    }
+
+    function paintDepth() {
+      depthRaf = null;
+      var mid = window.scrollY + window.innerHeight / 2;
+      var limit = window.innerHeight * 0.45;
+
+      depthItems.forEach(function (item) {
+        var offset = (mid - item.center) * item.rate;
+        offset = Math.max(-limit, Math.min(limit, offset));
+        item.el.style.setProperty("--py", offset.toFixed(1) + "px");
+      });
+    }
+
+    function onDepthScroll() {
+      if (!depthRaf) depthRaf = requestAnimationFrame(paintDepth);
+    }
+
+    measureDepth();
+    paintDepth();
+    window.addEventListener("scroll", onDepthScroll, { passive: true });
+    window.addEventListener("resize", function () { measureDepth(); onDepthScroll(); });
+  }
+
   /* --- Metrik-Balken nach dem Mount füllen -------------------------------- */
   setTimeout(function () {
     document.body.classList.add("is-mounted");

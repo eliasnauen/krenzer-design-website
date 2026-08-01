@@ -69,46 +69,61 @@
     rgba(15, 15, 19, .82) 60%,
     rgba(12, 12, 15, .84) 100%);
 
-  /* Specular-Kante: ein Lichtreflex, keine Umrandung. Deshalb nur oben links
-     ein Ansatz, der schnell abfällt — unten rechts bleibt ein schwacher Rest,
-     der die Form schließt. */
-  --glass-rim: linear-gradient(150deg,
-    rgba(255, 255, 255, .22) 0%,
-    rgba(255, 255, 255, .06) 22%,
-    rgba(255, 255, 255, .015) 48%,
-    rgba(255, 255, 255, .08) 100%);
+  /* Kante: kein Verlauf von oben nach unten, sondern ein Kegelverlauf mit
+     zwei gegenüberliegenden hellen Bögen — so, wie eine Glaskante zwei
+     Lichtquellen spiegelt. Der Startwinkel --angle-1 wandert beim Hovern,
+     dadurch läuft der Reflex um die Form. Direkt aus der Vorlage; dort ist
+     Hell = foreground, was im Dunkelmodus Weiß ist, und die Zwischenräume
+     sind background, also Schwarz.
 
-  --glass-rim-soft: linear-gradient(150deg,
-    rgba(255, 255, 255, .14) 0%,
-    rgba(255, 255, 255, .04) 26%,
-    rgba(255, 255, 255, .01) 55%,
-    rgba(255, 255, 255, .055) 100%);
+     Der zweite Verlauf liegt unter dem Kegel und füllt dessen durchsichtige
+     Stellen mit halbem Schwarz — dort ist die Kante dunkler als die Seite. */
+  --glass-rim:
+    conic-gradient(from var(--angle-1) at 50% 50%,
+      rgba(255, 255, 255, .5) 0%,
+      transparent 5% 40%,
+      rgba(255, 255, 255, .5) 50%,
+      transparent 60% 95%,
+      rgba(255, 255, 255, .5) 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, .5), rgba(0, 0, 0, .5));
 
-  /* Große Panels: hier darf die Kante deutlich brennen. Sie ist das, was von
-     der Form übrig bleibt, wenn die Fläche selbst kaum noch Verlauf hat. */
-  --glass-rim-strong: linear-gradient(150deg,
-    rgba(255, 255, 255, .46) 0%,
-    rgba(255, 255, 255, .13) 17%,
-    rgba(255, 255, 255, .025) 44%,
-    rgba(255, 255, 255, .07) 72%,
-    rgba(255, 255, 255, .20) 100%);
+  --glass-rim-soft:
+    conic-gradient(from var(--angle-1) at 50% 50%,
+      rgba(255, 255, 255, .32) 0%,
+      transparent 5% 40%,
+      rgba(255, 255, 255, .32) 50%,
+      transparent 60% 95%,
+      rgba(255, 255, 255, .32) 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, .5), rgba(0, 0, 0, .5));
 
-  /* Lichtkante oben, schwaches Rücklicht unten, Linse zum Rand hin. */
+  /* Große Panels: dieselben Bögen, nur heller. */
+  --glass-rim-strong:
+    conic-gradient(from var(--angle-1) at 50% 50%,
+      rgba(255, 255, 255, .62) 0%,
+      transparent 5% 40%,
+      rgba(255, 255, 255, .62) 50%,
+      transparent 60% 95%,
+      rgba(255, 255, 255, .62) 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, .5), rgba(0, 0, 0, .5));
+
+  /* Der Innenaufbau der Vorlage, Lage für Lage übernommen. Die Maße stehen
+     dort in em, damit sie mit der Schriftgröße mitwachsen — das behalte ich
+     bei. Hell ist foreground (im Dunkeln Weiß), dunkel ist background (im
+     Dunkeln Schwarz):
+       1. ein Kuss Licht oben auf der Innenseite
+       2. eine dunkle Kehle unten — die Scheibe hat Dicke
+       3. ein breites dunkles Band ringsum (.25em Spread, deshalb Ring)
+     Das Licht kommt aus dem Kegelring der Kante, nicht aus der Fläche. */
   --glass-edge-thin:
-    inset 0 1px 0 rgba(255, 255, 255, .11),
-    inset 0 -1px 0 rgba(255, 255, 255, .03),
-    inset 0 0 14px -8px rgba(255, 255, 255, .15);
+    inset 0 .125em .125em rgba(255, 255, 255, .05),
+    inset 0 -.125em .125em rgba(0, 0, 0, .5),
+    inset 0 0 .1em .25em rgba(0, 0, 0, .2);
 
-  /* Große Panels: kräftige Lichtkante, aber der Übergang zur Fläche bleibt
-     kurz. Das Licht bricht sich in der Dicke der Scheibe — das sind ein paar
-     Pixel, nicht ein Drittel des Panels. Läuft es weiter hinein, liest es
-     sich als Verlauf im Hintergrund statt als Kante. */
+  /* Große Panels: derselbe Aufbau, der Kuss oben etwas kräftiger. */
   --glass-edge-strong:
-    inset 0 1px 0 rgba(255, 255, 255, .17),
-    inset 0 -1px 0 rgba(255, 255, 255, .05),
-    inset 0 9px 14px -12px rgba(255, 255, 255, .3),
-    inset 0 -11px 16px -14px rgba(255, 255, 255, .14),
-    inset 0 0 16px -10px rgba(255, 255, 255, .07);
+    inset 0 .125em .125em rgba(255, 255, 255, .07),
+    inset 0 -.125em .125em rgba(0, 0, 0, .5),
+    inset 0 0 .1em .25em rgba(0, 0, 0, .2);
 
   /* Drei Entfernungen: Kontakt, Abheben, Raum. */
   --shadow-panel:
@@ -121,12 +136,20 @@
     0 14px 32px -20px rgba(0, 0, 0, .95),
     0 40px 90px -45px rgba(0, 0, 0, 1);
 
-  /* Fast unsichtbar — die Form trägt die Specular-Kante, nicht diese Linie. */
-  --glass-border: 1px solid rgba(255, 255, 255, .03);
+  /* Die äußere Begrenzung der Scheibe. In der Vorlage ist sie sichtbar, nicht
+     nur geahnt — sie schließt die Form nach außen ab, das Band innen macht
+     die Dicke. */
+  --glass-border: 1px solid rgba(255, 255, 255, .07);
 
   --font-sans: "Instrument Sans", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 }
+
+/* Die beiden Winkel der Vorlage. Registriert, weil ein Winkel sonst nicht
+   animierbar ist — ohne @property würde die Kante beim Hovern springen
+   statt zu wandern. Werte und Startwinkel wie im Original. */
+@property --angle-1 { syntax: "<angle>"; inherits: false; initial-value: -75deg; }
+@property --angle-2 { syntax: "<angle>"; inherits: false; initial-value: -45deg; }
 
 *, *::before, *::after { box-sizing: border-box; }
 
@@ -197,10 +220,12 @@ a:hover { color: #A8D2FF; }
 @keyframes km-caret     { 0%, 45% { opacity: 1; } 50%, 100% { opacity: 0; } }
 @keyframes km-pulse-ring{ 0% { transform: scale(1); opacity: .7; } 70%, 100% { transform: scale(2.6); opacity: 0; } }
 
-/* Scroll-Reveal */
+/* Scroll-Reveal. Der Hauch Skalierung ist der Unterschied zwischen „rutscht
+   herein“ und „kommt näher“: das Element wächst auf seine Größe, statt sie
+   von Anfang an zu haben. */
 .reveal {
   opacity: 0;
-  transform: translateY(30px);
+  transform: translateY(30px) scale(.985);
   transition: opacity .8s var(--ease), transform .8s var(--ease);
 }
 .reveal.is-in { opacity: 1; transform: none; }
@@ -291,6 +316,28 @@ a:hover { color: #A8D2FF; }
 .stack__panel,
 .process { --glass-rim: var(--glass-rim-strong); }
 
+/* Kantenbreite wie im Original: mit der Schrift wachsend, aber nie unter 1px
+   und nie über 4px. */
+.card, .kpis, .window, .stack__panel, .process,
+.badge, .btn--ghost, .tag, .pill-live, .avatar {
+  --rim-width: clamp(1px, .0625em, 4px);
+}
+
+/* Beim Überfahren wandert der Startwinkel — der Reflex läuft um die Form,
+   statt zu verharren. Genau die zwei Werte aus der Vorlage. */
+.card:hover::before,
+.btn--ghost:hover::before,
+.tag:hover::before { --angle-1: -125deg; }
+
+.btn--ghost:active::before { --angle-1: -75deg; }
+
+/* Der Text liegt auf der Scheibe und wirft seinen Schatten auf sie — in der
+   Vorlage ist das der zweite, unscharfe Schriftzug unter dem ersten. Nur auf
+   Flächen mit genug Schriftgröße; auf 12px-Chips würde es die Schrift nur
+   verwaschen. */
+.btn--ghost,
+.badge { text-shadow: 0 1px 3px rgba(0, 0, 0, .55); }
+
 .badge,
 .btn--ghost,
 .avatar,
@@ -322,17 +369,21 @@ a:hover { color: #A8D2FF; }
 .avatar::before {
   content: "";
   position: absolute;
-  inset: 0;
+  /* Die Kante sitzt im Original einen halben Strich außerhalb der Form,
+     nicht bündig — dadurch schließt der Ring die Fläche ein, statt sie zu
+     beschneiden. */
+  inset: calc(var(--rim-width) / -2);
   z-index: 2;
-  padding: 1px;
+  padding: var(--rim-width);
   border-radius: inherit;
   pointer-events: none;
   background: var(--glass-rim);
+  box-shadow: inset 0 0 0 calc(var(--rim-width) / 2) rgba(0, 0, 0, .5);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
           mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
           mask-composite: exclude;
-  transition: opacity .35s;
+  transition: opacity .35s, --angle-1 .5s ease;
 }
 
 /* --- Wandernder Reflex --------------------------------------------------- */
@@ -341,7 +392,6 @@ a:hover { color: #A8D2FF; }
 
 .card,
 .kpi,
-.btn--ghost,
 .tag {
   --mx: 50%;
   --my: 0%;
@@ -349,7 +399,6 @@ a:hover { color: #A8D2FF; }
 
 .card::after,
 .kpi::after,
-.btn--ghost::after,
 .tag::after {
   content: "";
   position: absolute;
@@ -365,10 +414,8 @@ a:hover { color: #A8D2FF; }
 
 .card:hover::after,
 .kpi:hover::after,
-.btn--ghost:hover::after,
 .tag:hover::after { opacity: 1; }
 
-.btn--ghost { --reflex: 130px; }
 .tag { --reflex: 70px; }
 
 /* Ohne backdrop-filter (ältere Browser) bleiben deckende Flächen. */
@@ -398,6 +445,23 @@ a:hover { color: #A8D2FF; }
 
 .page { position: relative; min-height: 100vh; background: var(--surface-0); overflow: hidden; }
 
+/* Atmosphäre: zum Rand hin verliert der Raum Licht. Der billigste und
+   ehrlichste Tiefenreiz überhaupt — nah ist hell, fern ist dunkel.
+
+   Wichtig ist die Ebene: nicht über dem Inhalt (dann läge ein Schleier auch
+   auf der Schrift und die Fußzeile würde grau), sondern zwischen Licht und
+   Inhalt. Damit dämpft der Verlauf nur die Glows — und die Panels nehmen ihn
+   über ihren backdrop-filter von selbst auf. Fixiert, damit die Aufhellung
+   dort bleibt, wo gerade gelesen wird. */
+.page::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(118% 84% at 50% 42%, transparent 55%, rgba(0, 0, 0, .55) 100%);
+}
+
 .progress {
   position: fixed;
   inset: 0 0 auto 0;
@@ -425,11 +489,18 @@ a:hover { color: #A8D2FF; }
   background: radial-gradient(680px circle at 50% 18%, rgba(150, 175, 235, .09), transparent 62%);
 }
 
+/* ---------- Tiefenebenen -------------------------------------------------- */
+
+/* Das Licht liegt hinter der Seite und bewegt sich langsamer als sie: je
+   weiter hinten, desto träger. --py kommt aus script.js, den Faktor legt
+   data-depth im Markup fest. Erst dadurch wird aus „dunkler Hintergrund mit
+   Flecken“ ein Raum, in dem die Panels tatsächlich vor etwas stehen. */
+
 .glow { position: absolute; pointer-events: none; z-index: 0; }
 .glow--top {
   top: -420px; left: 50%;
   width: min(1500px, 160vw); height: 900px;
-  transform: translateX(-50%);
+  transform: translate3d(-50%, var(--py, 0px), 0);
   background: radial-gradient(ellipse 50% 50% at 50% 50%, rgba(58, 86, 140, .34), rgba(20, 26, 40, .18) 45%, transparent 72%);
   filter: blur(30px);
   animation: km-breathe 14s ease-in-out infinite;
@@ -437,6 +508,7 @@ a:hover { color: #A8D2FF; }
 .glow--right {
   top: 760px; right: -320px;
   width: 900px; height: 900px;
+  transform: translate3d(0, var(--py, 0px), 0);
   background: radial-gradient(circle at center, rgba(70, 80, 110, .2), transparent 68%);
   filter: blur(40px);
 }
@@ -527,7 +599,9 @@ a:hover { color: #A8D2FF; }
   display: inline-block;
   font-size: 15.5px;
   font-weight: 500;
-  letter-spacing: -.012em;
+  /* tracking-tighter aus der Vorlage. Die enge Laufweite gehört dort zum
+     Bild: die Schrift sitzt als kompakter Block auf der Scheibe. */
+  letter-spacing: -.05em;
   white-space: nowrap;
   border-radius: 999px;
   padding: 14px 24px;
@@ -571,28 +645,73 @@ a:hover { color: #A8D2FF; }
   background: linear-gradient(180deg, rgba(255, 255, 255, .85) 0%, rgba(255, 255, 255, .12) 42%, rgba(255, 255, 255, 0) 62%);
 }
 
+/* Der Ghost-Button ist das direkte Gegenstück zur Vorlage — hier steht ihr
+   Aufbau vollständig:
+     Fläche  ein Verlauf über -75°, dunkel-dunkler-dunkel, kaum Unschärfe
+     Kante   der Kegelring (siehe oben), der beim Hovern wandert
+     Schrift 90 % Deckkraft und ein Schatten, der unter ihr auf der Scheibe
+             liegt — der zweite, unscharfe Schriftzug der Vorlage
+     Hover   die Scheibe wird klarer und schrumpft leicht
+     Druck   sie kippt nach hinten weg */
 .btn--ghost {
-  border: var(--glass-border);
-  color: var(--text-1);
-  box-shadow: var(--glass-edge-thin), 0 14px 32px -18px rgba(0, 0, 0, 1);
+  --anim-time: .4s;
+  --anim-ease: cubic-bezier(.25, 1, .5, 1);
+  --glass-tint: linear-gradient(-75deg,
+    rgba(0, 0, 0, .05), rgba(0, 0, 0, .2), rgba(0, 0, 0, .05));
+  --glass-filter: blur(clamp(1px, .125em, 4px)) saturate(170%);
+
+  border: 0;
+  color: rgba(245, 245, 247, .9);
+  text-shadow: 0 .25em .05em rgba(255, 255, 255, .1);
+  box-shadow: var(--glass-edge-thin), 0 .25em .25em -.125em rgba(0, 0, 0, .9);
+  transition: transform var(--anim-time) var(--anim-ease),
+              box-shadow var(--anim-time) var(--anim-ease),
+              text-shadow var(--anim-time) var(--anim-ease),
+              -webkit-backdrop-filter var(--anim-time) var(--anim-ease),
+              backdrop-filter var(--anim-time) var(--anim-ease);
 }
 .btn--ghost:hover {
-  --glass-tint: var(--glass-tint-hi);
-  color: var(--text-1);
-  transform: translateY(-2px);
-  box-shadow: var(--glass-edge-thin), 0 22px 44px -20px rgba(0, 0, 0, 1);
+  --glass-filter: blur(.01em) saturate(170%);
+  color: rgba(245, 245, 247, .9);
+  transform: scale(.975);
+  text-shadow: .025em .025em .025em rgba(255, 255, 255, .12);
+  box-shadow: var(--glass-edge-thin), 0 .15em .05em -.1em rgba(0, 0, 0, .95);
 }
-.btn--mono { font-family: var(--font-mono); font-size: 14.5px; padding: 15px 24px; }
+/* Perspektive direkt am Element: die Vorlage hat dafür einen Wrapper, den
+   dieses Markup nicht hat — das Ergebnis ist dasselbe. */
+.btn--ghost:active {
+  transform: perspective(60em) rotateX(25deg) scale(.975);
+  text-shadow: .025em .25em .05em rgba(255, 255, 255, .12);
+}
 
-.btn--sm {
-  font-size: 14px;
-  padding: 8px 17px;
-  --glass-tint: linear-gradient(148deg,
-    rgba(255, 255, 255, .13) 0%,
-    rgba(255, 255, 255, .05) 48%,
-    rgba(255, 255, 255, .055) 100%);
+/* Schliere: ein Lichtband, das beim Überfahren über die Scheibe zieht. Im
+   Original mischt es mit „screen“ ein halbdurchsichtiges Hintergrundweiß auf
+   — im Dunkeln wäre der Hintergrund Schwarz und screen mit Schwarz bewirkt
+   nichts. Deshalb hier Weiß mit kleiner Deckkraft, sonst identisch. */
+.btn--ghost::after {
+  content: "";
+  position: absolute;
+  inset: calc(var(--rim-width) / 2);
+  z-index: 3;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(var(--angle-2),
+    transparent 0%, rgba(255, 255, 255, .13) 40% 50%, transparent 55%);
+  background-size: 200% 200%;
+  background-position: 0%;
+  mix-blend-mode: screen;
+  transition: background-position calc(var(--anim-time) * 1.25) var(--anim-ease),
+              --angle-2 calc(var(--anim-time) * 1.25) var(--anim-ease);
 }
-.btn--sm:hover { color: #fff; transform: translateY(-1px); }
+.btn--ghost:hover::after { background-position: 25%; }
+.btn--ghost:active::after { --angle-2: -15deg; background-position: 50% 15%; }
+
+/* Die Monospace-Variante trägt eine E-Mail-Adresse — die bleibt auf Normalmaß,
+   enge Laufweite macht Adressen nur schwerer lesbar. */
+.btn--mono { font-family: var(--font-mono); font-size: 14.5px; padding: 15px 24px; letter-spacing: 0; }
+
+.btn--sm { font-size: 14px; padding: 8px 17px; }
+.btn--sm:hover { color: #fff; }
 
 /* ---------- Hero --------------------------------------------------------- */
 
@@ -670,6 +789,7 @@ a:hover { color: #A8D2FF; }
 .showcase__glow {
   position: absolute;
   inset: 12% 6% -6%;
+  transform: translate3d(0, var(--py, 0px), 0);
   background: radial-gradient(ellipse at 50% 50%, rgba(120, 140, 190, .28), transparent 70%);
   filter: blur(50px);
   pointer-events: none;
@@ -915,6 +1035,7 @@ a:hover { color: #A8D2FF; }
   z-index: -1;
   inset: -14% -8%;
   pointer-events: none;
+  transform: translate3d(0, var(--py, 0px), 0);
   background:
     radial-gradient(ellipse 55% 50% at 28% 22%, rgba(92, 122, 190, .17), transparent 70%),
     radial-gradient(ellipse 50% 50% at 84% 80%, rgba(60, 80, 130, .13), transparent 72%);
@@ -953,14 +1074,13 @@ a:hover { color: #A8D2FF; }
    Lichtkante oben wird heller — dieselbe Bewegung, die eine echte Scheibe
    macht, wenn man sie von der Unterlage abhebt. */
 .card:hover {
-  border-color: rgba(255, 255, 255, .06);
+  border-color: rgba(255, 255, 255, .12);
   transform: translateY(-4px);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, .26),
-    inset 0 -1px 0 rgba(255, 255, 255, .07),
-    inset 0 9px 14px -12px rgba(255, 255, 255, .38),
-    inset 0 -11px 16px -14px rgba(255, 255, 255, .18),
-    inset 0 0 16px -10px rgba(255, 255, 255, .1),
+    inset 0 0 0 1px rgba(255, 255, 255, .07),
+    inset 0 1px 1px -1px rgba(255, 255, 255, .8),
+    inset 0 -1px 1px -1px rgba(255, 255, 255, .45),
+    inset 0 0 12px 3px rgba(255, 255, 255, .1),
     0 3px 8px rgba(0, 0, 0, .5),
     0 30px 60px -26px rgba(0, 0, 0, .95),
     0 60px 120px -50px rgba(0, 0, 0, 1);
@@ -990,6 +1110,7 @@ a:hover { color: #A8D2FF; }
 .stack__glow {
   position: absolute;
   inset: 20% 10% -10%;
+  transform: translate3d(0, var(--py, 0px), 0);
   background: radial-gradient(ellipse at 50% 50%, rgba(110, 130, 180, .22), transparent 70%);
   filter: blur(50px);
   pointer-events: none;
@@ -1048,7 +1169,7 @@ a:hover { color: #A8D2FF; }
   --glass-tint: linear-gradient(172deg, rgba(8, 8, 11, .56), rgba(6, 6, 9, .6));
   min-height: 430px;
   box-shadow: inset 1px 0 0 rgba(255, 255, 255, .06),
-              inset 0 9px 14px -13px rgba(255, 255, 255, .3);
+              inset 0 1px 1px -1px rgba(255, 255, 255, .3);
 }
 .viewer__bar {
   display: flex;
@@ -1227,7 +1348,7 @@ a:hover { color: #A8D2FF; }
   position: absolute;
   top: 50%; left: 50%;
   width: min(1000px, 150vw); height: 620px;
-  transform: translate(-50%, -58%);
+  transform: translate3d(-50%, calc(-58% + var(--py, 0px)), 0);
   background: radial-gradient(ellipse at center, rgba(120, 145, 205, .16), transparent 68%);
   filter: blur(30px);
   pointer-events: none;
