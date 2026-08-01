@@ -7,3 +7,4 @@ studio/dist/
 
 .sanity/
 tsconfig.tsbuildinfo
+/gallery-loop

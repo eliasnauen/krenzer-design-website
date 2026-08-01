@@ -272,16 +272,52 @@
     </div>
   </section>
 
-  <!-- Testimonial -->
-  <section class="section">
-    <div class="quote-grid reveal">
-      <blockquote class="quote">
-        <p>„Die erste Agentur, bei der Design und Technik nicht gegeneinander gearbeitet haben. Unsere Anfragen haben sich im ersten Quartal <span class="accent">verdoppelt.</span>“</p>
-        <footer>
-          <span class="avatar">MB</span>
-          <span class="quote__author">Marlene Böhm<br><span>Head of Marketing, Voltmark GmbH</span></span>
-        </footer>
-      </blockquote>
+  <!-- Rezensionen -->
+  <section class="section" id="rezensionen" aria-label="Rezensionen">
+    <div class="reviews">
+
+      <!-- Die Wand aus Stimmen liegt hinter dem Text und läuft nach rechts
+           aus dem Bild. Die Spalten füllt reviews.js. -->
+      <div class="reviews__gallery">
+        <div class="reviews__stage">
+          <div class="reviews__vignette reviews__vignette--y" aria-hidden="true"></div>
+          <div class="reviews__vignette reviews__vignette--x" aria-hidden="true"></div>
+          <div class="reviews__matrix" id="reviewsMatrix">
+            <div class="reviews__col" data-dir="up"   style="--dur:44s; --delay:0s"></div>
+            <div class="reviews__col" data-dir="down" style="--dur:56s; --delay:-22.4s"></div>
+            <div class="reviews__col" data-dir="up"   style="--dur:48s; --delay:0s"></div>
+            <div class="reviews__col" data-dir="down" style="--dur:60s; --delay:-18s"></div>
+          </div>
+        </div>
+        <!-- Zieht die Wand zur Textseite hin ins Dunkle, damit das Zitat steht -->
+        <div class="reviews__scrim" aria-hidden="true"></div>
+      </div>
+
+      <div class="reviews__lead reveal">
+        <div class="eyebrow">Rezensionen</div>
+        <blockquote class="quote">
+          <p>„Die erste Agentur, bei der Design und Technik nicht gegeneinander gearbeitet haben. Unsere Anfragen haben sich im ersten Quartal <span class="accent">verdoppelt.</span>“</p>
+          <footer>
+            <span class="avatar">MB</span>
+            <span class="quote__author">Marlene Böhm<br><span>Head of Marketing, Voltmark GmbH</span></span>
+          </footer>
+        </blockquote>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Zahlen -->
+  <!-- Steht bewusst für sich: die Kennzahlen gehören zum Fall aus der
+       Rezension darüber, sind aber Messwerte, keine Stimme. Das CMS füllt
+       .kpis weiterhin über denselben Abschnitt (cms/render.js). -->
+  <section class="section section--metrics" aria-label="Zahlen nach dem Launch">
+    <div class="metrics-band reveal">
+      <div class="metrics-band__head section__head">
+        <div class="eyebrow">Nach dem Launch gemessen</div>
+        <h2 class="h2">Krenzer Design in Zahlen.</h2>
+        <p class="section__lead">Messwerte aus dem Projekt, über das die Stimme oben spricht — erhoben sechs Monate nach dem Livegang.</p>
+      </div>
       <div class="kpis">
         <div class="kpi"><div class="kpi__value">+118%</div><div class="kpi__label">Organischer Traffic</div></div>
         <div class="kpi"><div class="kpi__value">0,8 s</div><div class="kpi__label">LCP mobil</div></div>

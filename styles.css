@@ -254,7 +254,6 @@ a:hover { color: #A8D2FF; }
 /* --- Gruppe 1: Flächen auf der Seite — volle Scheibe --------------------- */
 
 .card,
-.kpi,
 .window,
 .stack__panel,
 .process,
@@ -269,7 +268,6 @@ a:hover { color: #A8D2FF; }
 }
 
 .card,
-.kpi,
 .window,
 .stack__panel,
 .process,
@@ -296,8 +294,7 @@ a:hover { color: #A8D2FF; }
 /* --- Stärken ------------------------------------------------------------- */
 
 /* Die großen Flächen: flache Tönung, dafür Kante und Lichteinfall kräftig. */
-.card,
-.kpi { --glass-tint: var(--glass-tint-panel); }
+.card { --glass-tint: var(--glass-tint-panel); }
 
 .window,
 .stack__panel,
@@ -308,14 +305,13 @@ a:hover { color: #A8D2FF; }
 }
 
 .card,
-.kpis,
 .window,
 .stack__panel,
 .process { --glass-rim: var(--glass-rim-strong); }
 
 /* Kantenbreite wie im Original: mit der Schrift wachsend, aber nie unter 1px
    und nie über 4px. */
-.card, .kpis, .window, .stack__panel, .process,
+.card, .window, .stack__panel, .process,
 .badge, .btn--ghost, .tag, .pill-live, .avatar {
   --rim-width: clamp(1px, .0625em, 4px);
 }
@@ -355,7 +351,6 @@ a:hover { color: #A8D2FF; }
    Maske ausgestanzt, damit die Fläche selbst frei bleibt. */
 
 .card::before,
-.kpis::before,
 .window::before,
 .stack__panel::before,
 .process::before,
@@ -388,14 +383,12 @@ a:hover { color: #A8D2FF; }
    220px-Lichtfleck auf einer Pille wäre nur ein heller Fleck ohne Bewegung. */
 
 .card,
-.kpi,
 .tag {
   --mx: 50%;
   --my: 0%;
 }
 
 .card::after,
-.kpi::after,
 .tag::after {
   content: "";
   position: absolute;
@@ -410,14 +403,13 @@ a:hover { color: #A8D2FF; }
 }
 
 .card:hover::after,
-.kpi:hover::after,
 .tag:hover::after { opacity: 1; }
 
 .tag { --reflex: 70px; }
 
 /* Ohne backdrop-filter (ältere Browser) bleiben deckende Flächen. */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .card, .kpi, .badge, .btn--ghost, .avatar { background: var(--glass-tint), var(--surface-1); }
+  .card, .badge, .btn--ghost, .avatar { background: var(--glass-tint), var(--surface-1); }
   .window, .stack__panel, .process { background: #0E0E11; }
   .marquee-section { background: linear-gradient(180deg, rgba(255, 255, 255, .02), transparent); }
 }
@@ -425,17 +417,17 @@ a:hover { color: #A8D2FF; }
 /* Systemeinstellung „Transparenz reduzieren“ respektieren. */
 @media (prefers-reduced-transparency: reduce) {
   .cards::before { display: none; }
-  .card, .kpi, .window, .stack__panel, .process,
+  .card, .window, .stack__panel, .process,
   .marquee-section, .badge, .btn--ghost, .avatar, .skip-link,
   .cases.is-hovered .case:hover {
     -webkit-backdrop-filter: none;
             backdrop-filter: none;
   }
-  .card, .kpi, .badge, .btn--ghost, .avatar { background: var(--surface-1); }
+  .card, .badge, .btn--ghost, .avatar { background: var(--surface-1); }
   .window, .stack__panel, .process { background: #0E0E11; }
   .stack__viewer { background: #08080A; }
   .skip-link { background: var(--text-1); }
-  .card::after, .kpi::after, .btn--ghost::after, .tag::after { display: none; }
+  .card::after, .btn--ghost::after, .tag::after { display: none; }
 }
 
 /* ---------- Layout-Rahmen ------------------------------------------------ */
@@ -1313,12 +1305,263 @@ a:hover { color: #A8D2FF; }
 
 /* ---------- Zitat & KPIs ------------------------------------------------- */
 
-.quote-grid {
-  display: grid;
-  grid-template-columns: 1fr .8fr;
-  gap: 60px;
+/* ---------- Rezensionen -------------------------------------------------- */
+
+/* Zwei Ebenen übereinander: hinten die laufende Wand aus Stimmen, vorne das
+   hervorgehobene Zitat mit den Zahlen. Auf schmalen Bildern wird daraus ein
+   Untereinander — der Text soll nie auf der Wand liegen. */
+.reviews {
+  /* Maße der Wand. Breiten in cqw, damit die Spalten mit dem Container
+     wachsen; Kartenhöhe und Schrift in px, damit dieselbe Rezension nicht bei
+     minimal anderer Breite eine Zeile mehr braucht — der Loop verlangt exakt
+     gleich hohe Karten. */
+  --rev-col-w: 22cqw;
+  --rev-card-h: 300px;
+  --rev-gap: 18px;
+  --rev-pad: 20px;
+  --rev-lines: 6;
+  --rev-fs-quote: 13.5px;
+  --rev-fs-stars: 12px;
+  --rev-fs-name: 12.5px;
+  --rev-fs-role: 11px;
+  --rev-fs-avatar: 10px;
+  --rev-avatar: 28px;
+
+  /* Versatz nach rechts und der dazugehörige Fluchtpunkt — die beiden Werte
+     gehören zusammen, siehe .reviews__matrix. */
+  --rev-x: 18cqw;
+  --persp-x: 68%;
+
+  position: relative;
+  min-height: clamp(560px, 76vh, 860px);
+  display: flex;
   align-items: center;
 }
+
+.reviews__gallery {
+  position: absolute;
+  inset: 0;
+  /* Bezugsgröße für die Maße der Wand: sie rechnet in cqw/cqh, nicht in
+     vw/vh. Sonst würde sie am Shell-Raster der Seite vorbeiwachsen, sobald
+     das Fenster breiter als --shell ist. */
+  container-type: size;
+  overflow: hidden;
+  border-radius: 26px;
+}
+
+.reviews__stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1000px;
+  perspective-origin: var(--persp-x) 50%;
+}
+
+/* Lässt die Wand nach allen Seiten ins Schwarz auslaufen, statt an einer
+   Kante abzubrechen. */
+.reviews__vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+.reviews__vignette--y {
+  box-shadow:
+    inset 0  90px 130px -60px var(--surface-0),
+    inset 0 -90px 130px -60px var(--surface-0);
+}
+.reviews__vignette--x {
+  box-shadow:
+    inset  120px 0 130px -60px var(--surface-0),
+    inset -120px 0 130px -60px var(--surface-0);
+}
+
+/* Der Verlauf zur Textseite: ohne ihn läge das Zitat auf den Karten. */
+.reviews__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background: linear-gradient(
+    to right,
+    var(--surface-0) 0%,
+    rgba(0, 0, 0, .92) 26%,
+    rgba(0, 0, 0, .55) 42%,
+    transparent 60%);
+}
+
+/* --- Die 3D-Wand ---------------------------------------------------------
+   Flacher gedreht als die Vorlage, aus der das stammt: ein großer
+   rotateY-Winkel spreizt die Spalten stark in der Tiefe, und was hinten
+   steht, ist dann nicht mehr zu lesen. Bei Bildern egal, bei Zitaten nicht. */
+.reviews__matrix {
+  display: flex;
+  gap: var(--rev-gap);
+  align-items: center;
+  justify-content: center;
+  width: 120cqw;
+  height: 150cqh;
+  flex-shrink: 0;
+
+  /* Der seitliche Versatz läuft über die Position, NICHT über ein translateX
+     in der Kette unten: die Wand liegt tief im Raum, und alles innerhalb der
+     Transform staucht die Perspektive um denselben Faktor wie die Tiefe. Als
+     Layout-Position bleibt der Wert exakt. --persp-x oben zieht den
+     Fluchtpunkt mit, sonst sähe man die Wand schräg von der Seite an. */
+  position: relative;
+  left: var(--rev-x);
+
+  transform-origin: center;
+  transform-style: preserve-3d;
+  transform:
+    translate3d(0, 0, -620px)
+    rotateX(12deg)
+    rotateY(-26deg)
+    rotateZ(8deg);
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.reviews__col {
+  width: var(--rev-col-w);
+  min-width: 190px;
+  flex-shrink: 0;
+}
+
+.reviews__track {
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+  backface-visibility: hidden;
+  animation: rev-loop-up var(--dur, 48s) var(--delay, 0s) linear infinite;
+  /* Läuft erst, wenn die Section im Bild ist — is-playing setzt reviews.js */
+  animation-play-state: paused;
+}
+.reviews__col[data-dir="down"] .reviews__track { animation-name: rev-loop-down; }
+#rezensionen.is-playing .reviews__track { animation-play-state: running; }
+
+/* Der Loop: der Track enthält dasselbe Set mehrfach und wird um exakt ein Set
+   verschoben — am Ende steht Set 2 dort, wo Set 1 begann, der Rücksprung ist
+   unsichtbar. --shift setzt reviews.js auf -100%/SETS.
+
+   Vier Sets statt zwei, weil der Track vertikal ZENTRIERT sitzt: bei zwei
+   Sets wanderte seine Unterkante nach einer vollen Verschiebung bis zur
+   Mitte, die untere Hälfte liefe im letzten Fünftel jeder Runde leer.
+
+   Dass die Verschiebung exakt ein Set trifft, hängt am margin-bottom der
+   Karten statt einem `gap` auf dem Track: mit `gap` hätten 4N Karten nur
+   4N-1 Abstände und die Verschiebung läge einen Bruchteil daneben. */
+@keyframes rev-loop-up {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(0, var(--shift, -25%), 0); }
+}
+@keyframes rev-loop-down {
+  from { transform: translate3d(0, var(--shift, -25%), 0); }
+  to   { transform: translate3d(0, 0, 0); }
+}
+
+/* --- Rezensionskarte -----------------------------------------------------
+   Die Höhe ist fest und der Inhalt wird abgeschnitten. Das ist Bedingung,
+   nicht Bequemlichkeit: der Loop trifft nur dann exakt ein Set, wenn jede
+   Karte gleich hoch ist. Eine Karte, die mit ihrem Text mitwächst, risse die
+   Naht auf.
+
+   Kein backdrop-filter wie sonst auf der Seite — 80 Karten mit Glas-Unschärfe
+   in einer 3D-Ebene kostet mehr, als der Effekt hier einbringt. Tönung und
+   Kante ahmen das Material nach, ohne zu filtern. */
+.rev-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: var(--rev-card-h);
+  margin-bottom: var(--rev-gap);   /* NICHT durch `gap` ersetzen, siehe oben */
+  flex-shrink: 0;
+  padding: var(--rev-pad);
+  overflow: hidden;
+  border: var(--glass-border);
+  border-radius: 18px;
+  opacity: .9;
+  background:
+    radial-gradient(115% 80% at 18% 0%, rgba(255, 255, 255, .06), transparent 64%),
+    linear-gradient(158deg, #17171b, #0d0d10);
+  box-shadow: var(--glass-edge-thin), 0 18px 40px -24px rgba(0, 0, 0, 1);
+  transition: opacity .3s var(--ease), transform .3s var(--ease);
+  will-change: transform;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+.rev-card:hover { opacity: 1; transform: scale(1.02); }
+
+.rev-card__stars {
+  display: flex;
+  flex-shrink: 0;
+  gap: .12em;
+  font-size: var(--rev-fs-stars);
+  line-height: 1;
+  color: rgba(255, 255, 255, .16);
+}
+.rev-card__star.is-on { color: var(--accent); }
+
+.rev-card__quote {
+  margin: .8em 0 0;
+  flex: 0 1 auto;
+  min-height: 0;
+  font-size: var(--rev-fs-quote);
+  line-height: 1.45;
+  letter-spacing: -.005em;
+  color: var(--text-soft);
+
+  /* Harte Zeilenbegrenzung: der Text darf die feste Kartenhöhe nie sprengen */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--rev-lines);
+  line-clamp: var(--rev-lines);
+  overflow: hidden;
+}
+.rev-card__quote::before { content: "„"; }
+.rev-card__quote::after  { content: "“"; }
+
+.rev-card__author {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: .7em;
+  margin-top: 1.1em;
+  min-width: 0;
+}
+
+.rev-card__avatar {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: var(--rev-avatar);
+  height: var(--rev-avatar);
+  border-radius: 99px;
+  border: var(--glass-border);
+  font-family: var(--font-mono);
+  font-size: var(--rev-fs-avatar);
+  color: var(--text-soft);
+  background: rgba(255, 255, 255, .06);
+}
+
+.rev-card__meta { display: flex; flex-direction: column; min-width: 0; }
+.rev-card__name,
+.rev-card__role { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rev-card__name { font-size: var(--rev-fs-name); font-weight: 500; color: var(--text-1); }
+.rev-card__role { font-size: var(--rev-fs-role); color: var(--text-4); }
+
+/* --- Vordergrund: das hervorgehobene Zitat -------------------------------- */
+.reviews__lead {
+  position: relative;
+  z-index: 5;
+  width: min(100%, 460px);
+}
+.reviews__lead .quote { margin-top: 22px; }
+
 .quote { margin: 0; }
 .quote p {
   margin: 0;
@@ -1344,22 +1587,54 @@ a:hover { color: #A8D2FF; }
 .quote__author { font-size: 15px; color: var(--text-1); }
 .quote__author span { color: var(--text-4); font-size: 14px; }
 
-/* Eine Scheibe, in vier Felder geteilt: das Material sitzt auf den Kacheln,
-   Kante und Lichtkanten auf dem Rahmen darum. */
+/* ---------- Zahlen ------------------------------------------------------- */
+
+/* Die Werte standen vorher als Glas-Scheibe in der Rezensions-Section. Jetzt
+   stehen sie frei: zentrierter Kopf, darunter die Zahlen nur durch feine
+   Striche getrennt. Deshalb ist .kpi auch aus den Glas-Gruppen weiter oben
+   herausgenommen — hier soll nichts mehr unter den Zahlen liegen.
+   Die Klassennamen bleiben, weil cms/render.js genau sie schreibt. */
+.section--metrics { padding-top: clamp(56px, 7vw, 92px); }
+.metrics-band__head { margin: 0 auto; max-width: 620px; }
+.metrics-band__head .section__lead { margin-top: 16px; }
+
 .kpis {
-  position: relative;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1px;
-  background: rgba(255, 255, 255, .045);
-  border: var(--glass-border);
-  border-radius: 22px;
-  overflow: hidden;
-  box-shadow: var(--glass-edge-strong), var(--shadow-panel);
+  grid-template-columns: repeat(4, 1fr);
+  margin-top: clamp(40px, 5vw, 64px);
 }
-.kpi { padding: 30px; }
-.kpi__value { font-size: clamp(28px, 3vw, 34px); letter-spacing: -.04em; font-weight: 500; color: var(--text-1); }
-.kpi__label { margin-top: 6px; font-size: 13.5px; color: var(--text-3); }
+
+/* Trennstriche zwischen den Feldern, nicht außen herum — daher auf jedem
+   Feld ab dem zweiten, statt als Rahmen auf dem Grid. */
+.kpi {
+  padding: 4px clamp(12px, 2vw, 28px);
+  text-align: center;
+}
+.kpi + .kpi { border-left: 1px solid var(--line-soft); }
+
+.kpi__value {
+  font-size: clamp(30px, 4vw, 46px);
+  line-height: 1.05;
+  letter-spacing: -.04em;
+  font-weight: 500;
+  color: var(--text-1);
+  /* Gleich breite Ziffern: sonst zappelt die Zahl beim Hochzählen. */
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+.kpi__label {
+  margin-top: 10px;
+  font-size: 13.5px;
+  color: var(--text-3);
+  text-wrap: balance;
+}
+
+@media (max-width: 860px) {
+  .kpis { grid-template-columns: repeat(2, 1fr); gap: 40px 0; }
+  /* Bei zwei Spalten trennt der Strich nur noch innerhalb der Reihe. */
+  .kpi + .kpi { border-left: none; }
+  .kpi:nth-child(even) { border-left: 1px solid var(--line-soft); }
+}
 
 /* ---------- CTA ---------------------------------------------------------- */
 
@@ -1471,9 +1746,39 @@ a:hover { color: #A8D2FF; }
   .stack__side { border-right: none; border-bottom: 1px solid var(--line-soft); }
   .stack__meta { padding-top: 20px; }
   .steps { grid-template-columns: repeat(2, 1fr); }
-  .quote-grid { grid-template-columns: 1fr; gap: 40px; }
   .case { grid-template-columns: 40px 1.2fr 1fr 96px; }
   .case__kpi { grid-column: 2 / 4; margin-top: -8px; }
+
+  /* Ab hier reicht die Breite nicht mehr für Text NEBEN der Wand: die Wand
+     rutscht unter das Zitat und läuft dort mittig, statt dahinter. */
+  .reviews {
+    display: flex;
+    flex-direction: column;
+    /* Muss mit: das `center` der Desktop-Regel würde die Wand hier auf ihre
+       Inhaltsbreite schrumpfen — und die ist wegen container-type: size null. */
+    align-items: stretch;
+    min-height: 0;
+    --rev-x: 0;
+    --persp-x: 50%;
+    --rev-col-w: 34cqw;
+    --rev-card-h: 230px;
+    --rev-lines: 5;
+  }
+  /* order, weil die Wand im DOM vor dem Zitat steht — nebeneinander liegt sie
+     dahinter, untereinander gehört sie hinter den Text. */
+  .reviews__lead { order: 1; width: 100%; }
+  .reviews__gallery {
+    order: 2;
+    position: relative;
+    inset: auto;
+    height: clamp(340px, 52vh, 460px);
+    margin-top: 48px;
+  }
+  /* Kein seitlicher Verlauf mehr — der Text liegt jetzt darüber, nicht daneben */
+  .reviews__scrim {
+    background: linear-gradient(to bottom,
+      var(--surface-0) 0%, transparent 18%, transparent 82%, var(--surface-0) 100%);
+  }
 }
 
 @media (max-width: 860px) {
@@ -1497,7 +1802,6 @@ a:hover { color: #A8D2FF; }
   .case__kpi { grid-column: 1 / -1; margin-top: 0; }
   .cases.is-hovered .case:hover { padding-left: 16px; }
   .steps { grid-template-columns: 1fr; gap: 24px; }
-  .kpis { grid-template-columns: repeat(2, 1fr); }
   .btn { width: 100%; text-align: center; }
   .hero__actions, .cta__actions { flex-direction: column; align-items: stretch; }
   .footer__bottom { flex-direction: column; align-items: flex-start; gap: 8px; }

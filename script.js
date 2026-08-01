@@ -5,10 +5,21 @@
    Wird von main.js aufgerufen, nachdem die Inhalte aus dem CMS im DOM stehen —
    sonst würden die Event-Listener an Elementen hängen, die es nicht mehr gibt. */
 
+import {initReviews} from './reviews.js'
+import {initStats} from './stats.js'
+
 export function initInteractions() {
   "use strict";
 
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* --- Rezensionswand und Zahlen ------------------------------------------ */
+  /* Zuerst, damit die Karten im DOM stehen, bevor der Scroll-Reveal und die
+     aktive Navigation weiter unten ihre Beobachter setzen. initStats() liest
+     die Zielwerte aus dem Markup — es muss also nach dem CMS-Render laufen,
+     was es tut: main.js ruft initInteractions() erst danach auf. */
+  initReviews();
+  initStats();
 
   /* --- Grund hinter der Kopfleiste --------------------------------------- */
   /* Sobald die Seite unter der Leiste durchwandert, blendet er ein. Die
@@ -146,7 +157,9 @@ export function initInteractions() {
   /* Delegiert an der Seite, nicht an den Flächen selbst: Karten und Tags
      werden aus dem CMS neu geschrieben, die Seite bleibt stehen.
      Das Gegenstück steht in styles.css als ::after auf denselben Klassen. */
-  var GLASS_SELECTOR = ".card, .kpi, .btn--ghost, .tag";
+  /* .kpi steht hier nicht mehr: die Zahlen sind seit dem eigenen Abschnitt
+     keine Glasflächen mehr und hätten für --mx/--my keine Verwendung. */
+  var GLASS_SELECTOR = ".card, .btn--ghost, .tag";
 
   if (page && !reduceMotion && window.matchMedia("(pointer: fine)").matches) {
     var glassRaf = null;
